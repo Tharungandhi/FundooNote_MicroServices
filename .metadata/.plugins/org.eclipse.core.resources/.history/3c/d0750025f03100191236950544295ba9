@@ -1,0 +1,5 @@
+package com.brideglabz.fundoonotes.service;
+
+public class UserServiceImpl {
+
+}

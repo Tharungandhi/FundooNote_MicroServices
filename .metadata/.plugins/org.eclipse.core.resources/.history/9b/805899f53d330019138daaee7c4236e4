@@ -1,0 +1,34 @@
+package com.bridgelabz.fundoonotes.controller;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.bridgelabz.fundoonotes.model.UserDetails;
+import com.bridgelabz.fundoonotes.service.UserService;
+
+
+@Controller
+@RequestMapping("/user/")
+public class UserController
+{
+     @Autowired 
+        private UserService userService;  
+     
+     @PostMapping(value = "/register")
+        public ResponseEntity<?> register(@RequestBody UserDetails user,HttpServletRequest request) {
+
+            UserDetails newUser = userService.register(user,request);
+            if (newUser != null) {
+                return new ResponseEntity<UserDetails>(newUser, HttpStatus.FOUND);
+            } else {
+                return new ResponseEntity<String>("Not created", HttpStatus.NOT_FOUND);
+            }
+        }
+}

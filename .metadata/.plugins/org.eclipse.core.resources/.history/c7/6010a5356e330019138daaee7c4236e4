@@ -1,0 +1,10 @@
+package com.bridgelabz.fundoonotes.service;
+
+import javax.servlet.http.HttpServletRequest;
+
+import com.bridgelabz.fundoonotes.model.Note;
+
+public interface NoteService {
+
+	boolean createNote(String token,Note user, HttpServletRequest request);
+}

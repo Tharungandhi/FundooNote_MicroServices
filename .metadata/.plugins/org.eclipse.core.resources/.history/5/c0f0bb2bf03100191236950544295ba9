@@ -1,0 +1,12 @@
+package com.brideglabz.fundoonotes.service;
+
+import com.brideglabz.fundoonotes.model.UserDetails;
+
+public class UserServiceImpl {
+
+	@Override
+    public UserDetails register(UserDetails user) {
+//        user.setPassword(bcryptEncoder.encode(user.getPassword()));
+        UserDetails newuser= userDetailsRepository.save(user);
+	}
+}

@@ -1,0 +1,43 @@
+package com.bridgelabz.fundoonotes.service;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import com.bridgelabz.fundoonotes.dao.UserDetailsRepository;
+import com.bridgelabz.fundoonotes.model.UserDetails;
+import com.bridgelabz.fundoonotes.util.EmailUtil;
+import com.bridgelabz.fundoonotes.util.GenerateTokenImlp;
+@Service
+public class UserServiceImpl  implements UserService {
+
+	   @Autowired
+	    private UserDetailsRepository userDetailsRepository;
+	   
+	   @Autowired
+		private PasswordEncoder bcryptEncoder;
+	   
+	   @Autowired
+		private GenerateTokenImlp generateToken;
+	   
+	   @Autowired
+		private EmailUtil emailutil;
+
+	   
+	@Override
+    public UserDetails register(UserDetails user, HttpServletRequest request) {
+		user.setPassword(bcryptEncoder.encode(user.getPassword()));
+		UserDetails newUser=  userDetailsRepository.save(user);
+		String token = generateToken.generateToken(String.valueOf(newUser));
+		System.out.println(token);
+		 StringBuffer requestUrl = request.getRequestURL();
+         String activationUrl = requestUrl.substring(0, requestUrl.lastIndexOf("/"));
+         activationUrl = activationUrl + "/activationstatus/" + token;
+         System.out.println(activationUrl);
+         emailutil.sendEmail("", "Activation Status Verification", activationUrl);
+		return newUser;
+	
+	}
+}

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+<fullyQualifiedTypeName name="com.brideglabz.fundoonotes.model.UserDetails"/>
+<fullyQualifiedTypeName name="com.bridgelabz.fundoonotes.dao.UserDetailsRepository"/>
+<fullyQualifiedTypeName name="org.springframework.beans.factory.annotation.Autowired"/>
+<fullyQualifiedTypeName name="org.springframework.stereotype.Service"/>
+<fullyQualifiedTypeName name="org.springframework.context.annotation.Configuration"/>
+<fullyQualifiedTypeName name="org.springframework.context.annotation.ComponentScan"/>
+<fullyQualifiedTypeName name="org.springframework.context.annotation.Bean"/>
+</qualifiedTypeNameHistroy>

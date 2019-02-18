@@ -1,0 +1,20 @@
+package com.bridgelabz.fundoonotes.service;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.bridgelabz.fundoonotes.model.Note;
+import com.bridgelabz.fundoonotes.util.GenerateTokenImpl;
+
+public class NoteServiceImpl {
+
+	
+	@Autowired
+	GenerateTokenImpl generateToken;
+	
+	public boolean createNote(String token,Note note, HttpServletRequest request) {
+		int id = generateToken.verifyToken(token);
+}
+}
+

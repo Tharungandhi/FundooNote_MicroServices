@@ -1,0 +1,8 @@
+package com.brideglabz.fundoonotes.service;
+
+import com.brideglabz.fundoonotes.model.UserDetails;
+
+public interface UserService {
+
+	UserDetails register(UserDetails user);
+}

@@ -1,0 +1,62 @@
+package com.bridgelabz.fundoonotes.service;
+
+
+	import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
+
+	import com.bridgelabz.fundoonotes.model.UserDetails;
+//import com.bridgelabz.fundoonotes.util.GenerateTokenImlp;
+import com.bridgelabz.fundoonotes.dao.UserDetailsRepository;
+
+
+	@Service
+	public class UserServiceImpl implements UserService{
+
+	    @Autowired
+	    private UserDetailsRepository userDetailsRepository;
+	    
+//	    @Autowired
+//	    private BCryptPasswordEncoder bcryptEncoder;
+//	    
+//	    @Autowired
+//		private GenerateTokenImlp generateToken;
+	   
+	    @Override
+	    public UserDetails register(UserDetails user, HttpServletRequest request) {
+//	        user.setPassword(bcryptEncoder.encode(user.getPassword()));
+	        UserDetails newuser= userDetailsRepository.save(user);
+//	        String token = generateToken.generateToken(String.valueOf(newuser.getId()));
+//	        if(newuser!=null) {
+//			 StringBuffer requestUrl = request.getRequestURL();
+//	            String activationUrl = requestUrl.substring(0, requestUrl.lastIndexOf("/"));
+//	            activationUrl = activationUrl + "/activationstatus/" + token;
+//	            System.out.println(activationUrl);
+//	            emailutil.sendEmail("", "Activation Status Verification", activationUrl);
+			
+	        
+			return newuser;     
+	    }
+	
+//		@Override
+//		public boolean login(UserDetails user) {
+//			if(user!=null) {
+//				if(userDetailsRepository.exists(user.getEmailId(),user.getPassword()))
+//					{
+//						return true;
+//					}
+//				}
+//			return false;
+//			
+//		}
+
+	
+
+	
+	    
+	    
+	    
+	}
+
