@@ -20,6 +20,8 @@ public class Label {
 	
 	@Column(name="userId")
 	private int userId;
+	
+	
 
 	public int getId() {
 		return id;

@@ -98,6 +98,31 @@ public class UserServiceImpl  implements UserService {
 		return null;	
     }
     
-    
+
+	
+	public boolean forgotPassword(String emailId, HttpServletRequest request) {
+		UserDetails user = userDetailsRepository.getUserByEmailId(emailId);
+		if (user != null) {
+			String token = generateToken.generateToken(String.valueOf(user.getId()));
+			 StringBuffer requestUrl = request.getRequestURL();
+	            String forgotPasswordLink = requestUrl.substring(0, requestUrl.lastIndexOf("/"));
+	            forgotPasswordLink = forgotPasswordLink + "/resetpassword/" + token;
+	            emailutil.sendEmail("", "Rest password verification", forgotPasswordLink);
+			
+		}
+		return false;
+
+	}
+	public UserDetails resetPassword(UserDetails user, String token, HttpServletRequest request) {
+		int id = generateToken.verifyToken(token);
+		Optional<UserDetails> optional = userDetailsRepository.findById(id);
+		if (optional.isPresent()) {
+			UserDetails reSetUser=optional.get();
+			reSetUser.setPassword(bcryptEncoder.encode(user.getPassword()));
+			userDetailsRepository.save(reSetUser);
+			return reSetUser;
+		}
+		return null;
+	}
     
 }

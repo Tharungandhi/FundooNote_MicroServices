@@ -2,6 +2,7 @@ package com.bridgelabz.fundoonotes.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -54,10 +55,10 @@ public class NoteServiceImpl implements NoteService {
 		int userId = generateToken.verifyToken(token);
 		Optional<Note> optional = noteDetailsRepository.findById(id);
 		if(optional.isPresent()) {
-			Note updatedNote=optional.get();
-			if(updatedNote.getUserId()==userId) {
-				noteDetailsRepository.delete(updatedNote);
-		return updatedNote;
+			Note existingNote=optional.get();
+			if(existingNote.getUserId()==userId) {
+				noteDetailsRepository.delete(existingNote);
+		return existingNote;
 	}}
 		return null;}
 	
@@ -91,9 +92,75 @@ public class NoteServiceImpl implements NoteService {
     	    	
     	    }
 		
+    	    public Label updateLabel(int id,String token, Label label, HttpServletRequest request) {
+    	    	int userid = generateToken.verifyToken(token);
+    			Optional<Label> optional = labelDetailsRepository.findById(id);
+    			if(optional.isPresent())
+    			{
+    				Label updatedLabel=optional.get();
+    				if(updatedLabel.getUserId()==userid) {
+    					updatedLabel.setLabelName(label.getLabelName());
+                       return updatedLabel;
+    				}
+    			}
+    	    	return null;
+    	    	
+    	    }
 
+	public List<Label> retrieveLabel(String token, HttpServletRequest request){
+		 int userId = generateToken.verifyToken(token);
+	        List<Label> labels = labelDetailsRepository.findAllByUserId(userId);
+	        if (!labels.isEmpty()) {
+	            return labels;
+	        }
+			return null;}
+	
+	
+	
+	public boolean mapNoteLabel(String token, int noteId, int labelId, HttpServletRequest request) {
+		 int userId = generateToken.verifyToken(token);
+	        Optional<Label> optional=labelDetailsRepository.findById(labelId);
+	        Optional<Note> optional1=noteDetailsRepository.findById(noteId);
+	        if (optional.isPresent() && optional1.isPresent())
+	        {
+	            Note note = optional1.get();
+	            Label label = optional.get();
+	            if(label.getUserId()==userId && note.getUserId()==userId)
+	            {
+	            List<Label> labels = note.getLabels();
+	            labels.add(label);
+	            if (!labels.isEmpty())
+	            {
+	            note.setLabels(labels);
+	            noteDetailsRepository.save(note);
+	            }
+	                return true;
+	        }}
+			return false;
+	}
+	
+	@Override
+    public boolean removeNoteLabel(String token, int noteId, int labelId, HttpServletRequest request) {
+        int userId = generateToken.verifyToken(token);
+        Optional<Label> optionallabel=labelDetailsRepository.findById(labelId);
+        Optional<Note> optionalnote=noteDetailsRepository.findById(noteId);
+        if (optionallabel.isPresent() && optionalnote.isPresent()) {   
+            Note note = optionalnote.get();
+            List<Label> labels = note.getLabels();
+            if (!labels.isEmpty()) {
+                labels = labels.stream().filter(label -> label.getId() != labelId).collect(Collectors.toList());
+                note.setLabels(labels);
+                noteDetailsRepository.delete(note);
+           
+                return true;
+            }
+        }
+        return false;
+    }
 	
 	
 }
+	
+
 
 

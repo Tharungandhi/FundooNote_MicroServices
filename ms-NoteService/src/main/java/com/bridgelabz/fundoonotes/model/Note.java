@@ -2,42 +2,52 @@ package com.bridgelabz.fundoonotes.model;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-
+import javax.persistence.JoinColumn;
 import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
-@Table(name="Note")
+@Table(name = "Note")
 public class Note implements Serializable {
 
 	@Id
 	@GeneratedValue
-	@Column(name="id")
+	@Column(name = "id")
 	private int id;
-	
-	@Column(name="title")
+
+	@Column(name = "title")
 	private String title;
-	
-	@Column(name="discription")
+
+	@Column(name = "discription")
 	private String discription;
-	
-	@Column(name="isPinned")
+
+	@Column(name = "isPinned")
 	private boolean isPinned;
-	
-	@Column(name="inTrash")
+
+	@Column(name = "inTrash")
 	private boolean inTrash;
-	
-	@Column(name="updateTime")
+
+	@Column(name = "updateTime")
 	@UpdateTimestamp
 	private Timestamp updateTime;
-	
-	@Column(name="userId")
+
+	@Column(name = "userId")
 	private int userId;
+
+	@ManyToMany(fetch = FetchType.EAGER, targetEntity = Label.class, cascade = {CascadeType.ALL })
+	@JoinTable(name = "Note_Label", joinColumns = { @JoinColumn(name = "noteId") }, inverseJoinColumns = {
+			@JoinColumn(name = "labelId") })
+	private List<Label> labels;
 	
 	public int getUserId() {
 		return userId;
@@ -47,12 +57,14 @@ public class Note implements Serializable {
 		this.userId = userId;
 	}
 
-	@Column(name="createdTime")
+	@Column(name = "createdTime")
 	@UpdateTimestamp
 	private Timestamp createdTime;
-	
-	@Column(name="isArchive")
+
+	@Column(name = "isArchive")
 	private boolean isArchive;
+
+	
 
 	public int getId() {
 		return id;
@@ -117,5 +129,13 @@ public class Note implements Serializable {
 	public void setArchive(boolean isArchive) {
 		this.isArchive = isArchive;
 	}
-	
+
+	public List<Label> getLabels() {
+		return labels;
+	}
+
+	public void setLabels(List<Label> labels) {
+		this.labels = labels;
+	}
+
 }

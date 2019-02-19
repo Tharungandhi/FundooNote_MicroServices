@@ -24,5 +24,17 @@ public interface NoteService {
 	
 	Label createLabel(String token, Label label, HttpServletRequest request);
 	
+	Label updateLabel(int id,String token, Label label, HttpServletRequest request);
+	
 	Label  deleteLabel(int id,String token, HttpServletRequest request);
-}
+	
+	List<Label> retrieveLabel(String token, HttpServletRequest request);
+	
+	
+	
+	boolean mapNoteLabel(String token, int noteId, int labelId, HttpServletRequest request);
+   
+	boolean removeNoteLabel(String token, int noteId, int labelId, HttpServletRequest request);
+	}
+
+

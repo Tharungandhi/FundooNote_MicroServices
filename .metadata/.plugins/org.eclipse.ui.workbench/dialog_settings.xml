@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
 	<section name="org.eclipse.ui.internal.QuickAccess">
-		<item value="244" key="dialogHeight"/>
-		<item value="344" key="dialogWidth"/>
+		<item value="238" key="dialogHeight"/>
+		<item value="338" key="dialogWidth"/>
 		<list key="textEntries">
-			<item value="1"/>
+			<item value="2"/>
 		</list>
 		<list key="orderedElements">
 			<item value="org.eclipse.wst.server.ui.ServersView"/>
@@ -14,6 +14,7 @@
 		</list>
 		<list key="textArray">
 			<item value="server"/>
+			<item value="serve"/>
 		</list>
 	</section>
 </section>
