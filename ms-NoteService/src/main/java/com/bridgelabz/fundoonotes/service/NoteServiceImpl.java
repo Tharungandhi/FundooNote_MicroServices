@@ -119,12 +119,12 @@ public class NoteServiceImpl implements NoteService {
 	
 	public boolean mapNoteLabel(String token, int noteId, int labelId, HttpServletRequest request) {
 		 int userId = generateToken.verifyToken(token);
-	        Optional<Label> optional=labelDetailsRepository.findById(labelId);
-	        Optional<Note> optional1=noteDetailsRepository.findById(noteId);
-	        if (optional.isPresent() && optional1.isPresent())
+	        Optional<Label> optional1=labelDetailsRepository.findById(labelId);
+	        Optional<Note> optional2=noteDetailsRepository.findById(noteId);
+	        if (optional1.isPresent() && optional1.isPresent())
 	        {
-	            Note note = optional1.get();
-	            Label label = optional.get();
+	            Note note = optional2.get();
+	            Label label = optional1.get();
 	            if(label.getUserId()==userId && note.getUserId()==userId)
 	            {
 	            List<Label> labels = note.getLabels();
@@ -151,10 +151,8 @@ public class NoteServiceImpl implements NoteService {
                 labels = labels.stream().filter(label -> label.getId() != labelId).collect(Collectors.toList());
                 note.setLabels(labels);
                 noteDetailsRepository.delete(note);
-           
                 return true;
-            }
-        }
+            } }
         return false;
     }
 	

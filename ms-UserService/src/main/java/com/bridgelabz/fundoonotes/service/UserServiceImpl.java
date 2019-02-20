@@ -1,5 +1,6 @@
 package com.bridgelabz.fundoonotes.service;
 
+
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,6 +15,7 @@ import com.bridgelabz.fundoonotes.model.UserDetails;
 import com.bridgelabz.fundoonotes.util.EmailUtil;
 import com.bridgelabz.fundoonotes.util.GenerateTokenImlp;
 import org.springframework.transaction.annotation.Transactional;
+
 @Service
 public class UserServiceImpl  implements UserService {
 
@@ -30,7 +32,7 @@ public class UserServiceImpl  implements UserService {
 		private EmailUtil emailutil;
 
 	   
-	   @Transactional
+	   
     public UserDetails register(UserDetails user, HttpServletRequest request) {
 		user.setPassword(bcryptEncoder.encode(user.getPassword()));
 		UserDetails newUser=  userDetailsRepository.save(user);
@@ -44,17 +46,18 @@ public class UserServiceImpl  implements UserService {
 	
 	}
 	
-	   @Transactional
-	public UserDetails login(UserDetails user, HttpServletRequest request,HttpServletResponse response) 
+	   
+	public String login(UserDetails user, HttpServletRequest request,HttpServletResponse response) 
 	{
 		UserDetails existingUser=userDetailsRepository.getUserByEmailId(user.getEmailId());
-		if (bcryptEncoder.matches(user.getPassword(),existingUser.getPassword() ) && existingUser.isActivationStatus() == true) {
-			String token = generateToken.generateToken(String.valueOf(existingUser.getId()));
-			response.setHeader("Tokens", token);
-			return existingUser;
-		}
-		return existingUser;
 		
+		if (bcryptEncoder.matches(user.getPassword(),existingUser.getPassword() ) && existingUser.isActivationStatus()) {
+			String token = generateToken.generateToken(String.valueOf(existingUser.getId()));
+			return token;
+		}
+		
+		
+		return null;
 	}
 	
     public UserDetails activateUser(String token, HttpServletRequest request) {

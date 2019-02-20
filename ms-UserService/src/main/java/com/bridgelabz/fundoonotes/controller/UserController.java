@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.validation.Validator;
 
 import com.bridgelabz.fundoonotes.model.UserDetails;
 import com.bridgelabz.fundoonotes.service.UserService;
@@ -30,21 +31,21 @@ import com.bridgelabz.fundoonotes.service.UserService;
 @RequestMapping("/user")
 public class UserController
 {
-	  @Autowired
-	   @Qualifier("UserValidation")
-	   private org.springframework.validation.Validator validator;
+//	  @Autowired
+//	   @Qualifier("userValidator")
+//	   private Validator validator;
 
-	   @InitBinder
-	   private void initBinder(WebDataBinder binder) {
-	       binder.setValidator( validator);
-	   }
+//	   @InitBinder
+//	   private void initBinder(WebDataBinder binder) {
+//	       binder.setValidator( validator);
+//	   }
      @Autowired 
         private UserService userService;  
      
    
      
      @PostMapping(value = "/register")
-        public ResponseEntity<?> register( @Validated @RequestBody UserDetails user, BindingResult bindingResult,HttpServletRequest request) {
+        public ResponseEntity<?> register( @RequestBody UserDetails user, BindingResult bindingResult,HttpServletRequest request) {
     	 if (bindingResult.hasErrors()) {
              return new ResponseEntity<String>("Invalid entry!!! Please enter valid details", HttpStatus.NOT_FOUND);
          } else {
@@ -76,15 +77,15 @@ public class UserController
      @PostMapping(value = "/login")
      public ResponseEntity<?> login( @RequestBody UserDetails user,HttpServletRequest request,HttpServletResponse response) {
  		try {
-         UserDetails userDetails = userService.login(user,request,response);
-         if(userDetails!= null) 
-             return new ResponseEntity<UserDetails>(userDetails, HttpStatus.FOUND);
+        String token = userService.login(user,request,response);	
+         if(token!= null) 
+        	 response.setHeader("token", token);
+             return new ResponseEntity<Void>(HttpStatus.OK);
         
      }catch (Exception e) {
  		e.printStackTrace();
-         return new ResponseEntity<String>("Dinied In Logging",HttpStatus.NOT_FOUND);
+         return new ResponseEntity<Void>(HttpStatus.CONFLICT);
  	}
- 		return new ResponseEntity<String>("Pls provide details correctly",HttpStatus.CONFLICT);
  	}
      
      @PostMapping(value = "/update")

@@ -9,7 +9,7 @@ public interface UserService {
 
 	UserDetails register(UserDetails user, HttpServletRequest request);
 	
-  UserDetails login(UserDetails user, HttpServletRequest request,HttpServletResponse response);
+  String login(UserDetails user, HttpServletRequest request,HttpServletResponse response);
 	
 	UserDetails activateUser(String token, HttpServletRequest request);
 	
