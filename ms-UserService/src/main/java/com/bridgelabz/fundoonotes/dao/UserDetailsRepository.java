@@ -10,4 +10,6 @@ import com.bridgelabz.fundoonotes.model.UserDetails;
 public interface UserDetailsRepository extends JpaRepository<UserDetails, Integer>{
 
 	UserDetails getUserByEmailId(String emailId);
+	
+
 }

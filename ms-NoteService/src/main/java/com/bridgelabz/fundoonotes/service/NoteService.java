@@ -16,7 +16,7 @@ public interface NoteService {
 	
 	Note updateNote(int id,String token,Note note,HttpServletRequest request);
 	
-	Note deleteNote(int id,String token,HttpServletRequest request);
+	boolean deleteNote(int id,String token,HttpServletRequest request);
 	
 	List<Note> retrieveNote(String token,HttpServletRequest request);
 	
@@ -26,7 +26,7 @@ public interface NoteService {
 	
 	Label updateLabel(int id,String token, Label label, HttpServletRequest request);
 	
-	Label  deleteLabel(int id,String token, HttpServletRequest request);
+	boolean  deleteLabel(int id,String token, HttpServletRequest request);
 	
 	List<Label> retrieveLabel(String token, HttpServletRequest request);
 	

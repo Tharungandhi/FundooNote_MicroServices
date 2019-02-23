@@ -54,8 +54,8 @@ public class NoteController {
 	@DeleteMapping(value="/deletenote")
 	public ResponseEntity<String> deleteNote(@RequestParam("id") int id ,@RequestHeader("token") String token,HttpServletRequest request)
 	{
-		Note deleteNote=noteService.deleteNote(id,token,request);
-		if (deleteNote!=null) {
+		boolean deleteNote=noteService.deleteNote(id,token,request);
+		if (deleteNote!=false) {
 			return new ResponseEntity<String>("Note Succesfully deleted",HttpStatus.FOUND);
 		} else {
 			return  new ResponseEntity<String>("Note not Found by given  Id",HttpStatus.NOT_FOUND);
@@ -86,7 +86,7 @@ public class NoteController {
 		public ResponseEntity<String> deleteLabel(@RequestParam("id") int id , @RequestHeader("token") String token,HttpServletRequest request)
 		{
 			try {
-				if (noteService.deleteLabel(id,token,request)!=null)
+				if (noteService.deleteLabel(id,token,request)!=false)
 					return new ResponseEntity<String>("Label Succesfully deleted",HttpStatus.FOUND);
 				else
 					return  new ResponseEntity<String>("Label not Found by given  Id",HttpStatus.NOT_FOUND);

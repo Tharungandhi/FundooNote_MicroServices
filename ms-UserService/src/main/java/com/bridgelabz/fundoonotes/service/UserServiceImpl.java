@@ -6,6 +6,7 @@ import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -31,19 +32,18 @@ public class UserServiceImpl  implements UserService {
 	   @Autowired
 		private EmailUtil emailutil;
 
-	   
-	   
-    public UserDetails register(UserDetails user, HttpServletRequest request) {
+	   private static Logger log = org.slf4j.LoggerFactory	.getLogger(UserServiceImpl.class);
+
+	public UserDetails register(UserDetails user, HttpServletRequest request) {
 		user.setPassword(bcryptEncoder.encode(user.getPassword()));
-		UserDetails newUser=  userDetailsRepository.save(user);
+		UserDetails newUser = userDetailsRepository.save(user);
 		String token = generateToken.generateToken(String.valueOf(newUser.getId()));
-		 StringBuffer requestUrl = request.getRequestURL();
-         String activationUrl = requestUrl.substring(0, requestUrl.lastIndexOf("/"));
-         activationUrl = activationUrl + "/activationstatus/" + token;
-         System.out.println(activationUrl);
-         emailutil.sendEmail("", "Activation Status Verification", activationUrl);
+		StringBuffer requestUrl = request.getRequestURL();
+		String activationUrl = requestUrl.substring(0, requestUrl.lastIndexOf("/"));
+		activationUrl += "/activationstatus/" + token;
+		emailutil.sendEmail("", "Activation Status Verification", activationUrl);
 		return newUser;
-	
+
 	}
 	
 	   
@@ -53,6 +53,7 @@ public class UserServiceImpl  implements UserService {
 		
 		if (bcryptEncoder.matches(user.getPassword(),existingUser.getPassword() ) && existingUser.isActivationStatus()) {
 			String token = generateToken.generateToken(String.valueOf(existingUser.getId()));
+			log.info(token);
 			return token;
 		}
 		
@@ -60,46 +61,36 @@ public class UserServiceImpl  implements UserService {
 		return null;
 	}
 	
-    public UserDetails activateUser(String token, HttpServletRequest request) {
-        int id = generateToken.verifyToken(token);
-        Optional<UserDetails> optional = userDetailsRepository.findById(id);
-
-        if(optional.isPresent())
-        {
-        	UserDetails user=optional.get();
-            user.setActivationStatus(true);
-            userDetailsRepository.save(user);
-            return user;
-        }
-        return null;
+	public UserDetails activateUser(String token, HttpServletRequest request) {
+		int id = generateToken.verifyToken(token);
+		Optional<UserDetails> maybeUser = userDetailsRepository.findById(id);
+		return maybeUser
+				.map(user -> userDetailsRepository.save(user.setActivationStatus(true)))
+				.orElseGet(() -> null);
 	}
     
     public UserDetails update(String token, UserDetails user, HttpServletRequest request) {
 		int id = generateToken.verifyToken(token);
-		Optional<UserDetails> optional = userDetailsRepository.findById(id);
-		if (optional.isPresent()) {
-			UserDetails exstingUser=optional.get();
-			exstingUser.setName(user.getName());
-			exstingUser.setEmailId(user.getEmailId());
-			exstingUser.setMobileNumber(user.getMobileNumber());
-			exstingUser.setPassword(bcryptEncoder.encode(user.getPassword()));
-			userDetailsRepository.save(exstingUser);
-			return exstingUser;
-		}
-		return null;
+		Optional<UserDetails> maybeUser = userDetailsRepository.findById(id);
+		
+		 return maybeUser
+				.map(existingUser ->{
+					existingUser.setName(user.getName())
+			.setEmailId(user.getEmailId())
+			.setMobileNumber(user.getMobileNumber())
+			.setPassword(bcryptEncoder.encode(user.getPassword()));
+			return userDetailsRepository.save(existingUser);	
+    }).orElseGet(()-> null);
 	}
     
-    public UserDetails delete( String token,HttpServletRequest request) {
-    	int id = generateToken.verifyToken(token);
-    	Optional<UserDetails> optional = userDetailsRepository.findById(id);
-    	if(optional.isPresent())
-    	{
-    		UserDetails deleteUser=optional.get();
-    		userDetailsRepository.delete(deleteUser);
-    		return deleteUser;
-    	}
-		return null;	
-    }
+	public boolean delete(String token, HttpServletRequest request) {
+		int id = generateToken.verifyToken(token);
+		Optional<UserDetails> optional = userDetailsRepository.findById(id);
+		return optional.map(user -> {
+			userDetailsRepository.delete(user);
+			return true;
+		}).orElseGet(() -> false);
+	}
     
 
 	

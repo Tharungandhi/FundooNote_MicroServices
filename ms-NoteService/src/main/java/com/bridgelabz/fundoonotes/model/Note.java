@@ -70,32 +70,37 @@ public class Note implements Serializable {
 		return id;
 	}
 
-	public void setId(int id) {
+	public Note setId(int id) {
 		this.id = id;
+		return this;
 	}
 
 	public String getTitle() {
 		return title;
 	}
 
-	public void setTitle(String title) {
+	public Note setTitle(String title) {
 		this.title = title;
+		return this;
+		
 	}
 
 	public String getDiscription() {
 		return discription;
 	}
 
-	public void setDiscription(String discription) {
+	public Note setDiscription(String discription) {
 		this.discription = discription;
+		return this;
 	}
 
 	public boolean isPinned() {
 		return isPinned;
 	}
 
-	public void setPinned(boolean isPinned) {
+	public Note setPinned(boolean isPinned) {
 		this.isPinned = isPinned;
+		return this;
 	}
 
 	public boolean isInTrash() {

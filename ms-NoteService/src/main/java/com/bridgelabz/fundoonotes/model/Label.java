@@ -35,15 +35,18 @@ public class Label {
 		return labelName;
 	}
 
-	public void setLabelName(String labelName) {
+	public Label setLabelName(String labelName) {
 		this.labelName = labelName;
+		return this;
+		
 	}
 
 	public int getUserId() {
 		return userId;
 	}
 
-	public void setUserId(int userId) {
+	public Label setUserId(int userId) {
 		this.userId = userId;
+		return this;
 	}
 }	
