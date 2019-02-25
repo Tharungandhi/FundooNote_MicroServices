@@ -94,9 +94,20 @@ public class UserServiceImpl  implements UserService {
     
 
 	
-	
+	public boolean forgotPassword(String emailId, HttpServletRequest request) {
+		UserDetails user = userDetailsRepository.getUserByEmailId(emailId);
+		if (user != null) {
+			String token = generateToken.generateToken(String.valueOf(user.getId()));
+			 StringBuffer requestUrl = request.getRequestURL();
+	            String forgotPasswordLink = requestUrl.substring(0, requestUrl.lastIndexOf("/"));
+	            forgotPasswordLink = forgotPasswordLink + "/resetpassword/" + token;
+	            emailUtil.sendEmail("", "Rest password verification", forgotPasswordLink);
+			
+		}
+		return false;
+	}
 
-		public boolean forgotPassword(UserDetails user, HttpServletRequest request) {
+		public boolean forgotPassword1(UserDetails user, HttpServletRequest request) {
 	        Optional<UserDetails> maybeUser = userDetailsRepository.findByEmailId(user.getEmailId());
 	        return maybeUser.map(existingUser -> {
 	            forgotpasswordEmail(request, existingUser, "/resetpassword/", "Reset password verification");

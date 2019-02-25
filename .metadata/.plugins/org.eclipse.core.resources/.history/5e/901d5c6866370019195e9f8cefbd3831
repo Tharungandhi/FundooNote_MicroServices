@@ -36,6 +36,7 @@ public class NoteController {
 		if (newNote!=null) {
 			return new ResponseEntity<String>("Note Succesfully Created",HttpStatus.OK);
 		} else {
+
 			return new ResponseEntity<String>("Denied In Creation of Note",HttpStatus.BAD_REQUEST);
 		}
 	}

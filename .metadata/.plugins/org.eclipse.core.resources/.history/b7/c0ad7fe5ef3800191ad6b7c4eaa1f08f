@@ -109,9 +109,10 @@ public class UserController {
 
 		boolean newUser = userService.forgotPassword(user, request);
 		if (newUser == false) {
-			return new ResponseEntity<Void>(HttpStatus.OK);
+			return new ResponseEntity<UserDetails>(HttpStatus.FOUND);
 		} else {
-			return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<String>("Email incorrect. Please enter valid email address present in database",
+					HttpStatus.NOT_FOUND);
 		}
 	}
 
@@ -120,10 +121,10 @@ public class UserController {
 			HttpServletRequest request) {
 		UserDetails user1 = userService.resetPassword(user, token, request);
 		if (user1 != null) {
-			return new ResponseEntity<Void>( HttpStatus.OK);
+			return new ResponseEntity<String>("password is Succeessfully updated", HttpStatus.FOUND);
 
 		} else {
-			return new ResponseEntity<Void>( HttpStatus.NOT_FOUND);
+			return new ResponseEntity<String>("Dinied In Reseting Password ", HttpStatus.NOT_FOUND);
 		}
 	}
 
