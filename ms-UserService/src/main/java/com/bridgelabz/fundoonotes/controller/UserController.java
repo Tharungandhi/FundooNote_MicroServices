@@ -126,5 +126,18 @@ public class UserController {
 			return new ResponseEntity<Void>( HttpStatus.NOT_FOUND);
 		}
 	}
+	
+//	@GetMapping(value="/userdetails")
+//	public ResponseEntity<?> userDetails(@PathVariable String tableName,HttpServletRequest request)
+//	{
+//		UserDetails detailsUser=(UserDetails) userService.userDetails(tableName,request);
+//		if(detailsUser!=null)
+//		{
+//			return new ResponseEntity<UserDetails>(detailsUser, HttpStatus.FOUND);
+//		}else {
+//			return new ResponseEntity<String>("No user present ", HttpStatus.NOT_FOUND);
+//
+//		}		
+//	}
 
 }

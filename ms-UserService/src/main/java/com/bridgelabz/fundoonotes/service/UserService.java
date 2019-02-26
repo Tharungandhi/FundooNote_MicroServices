@@ -1,6 +1,6 @@
 package com.bridgelabz.fundoonotes.service;
 
-import java.util.Optional;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -24,4 +24,6 @@ public interface UserService {
 	boolean forgotPassword(UserDetails user, HttpServletRequest request);
 	
 	UserDetails resetPassword(UserDetails user, String token, HttpServletRequest request);
+	
+//	List<UserDetails> userDetails(String tableName,HttpServletRequest request);
 }

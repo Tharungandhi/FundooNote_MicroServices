@@ -1,6 +1,7 @@
 package com.bridgelabz.fundoonotes.service;
 
 
+import java.util.List;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,7 +16,6 @@ import com.bridgelabz.fundoonotes.dao.UserDetailsRepository;
 import com.bridgelabz.fundoonotes.model.UserDetails;
 import com.bridgelabz.fundoonotes.util.EmailUtil;
 import com.bridgelabz.fundoonotes.util.GenerateTokenImlp;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserServiceImpl  implements UserService {
@@ -122,5 +122,15 @@ public class UserServiceImpl  implements UserService {
 		}
 		return null;
 	}
+
+
+//	public List<UserDetails> userDetails(String tableName,HttpServletRequest request) {
+//	
+//		List<UserDetails> user=userDetailsRepository.findAlluser(tableName);
+//		if (!user.isEmpty()) {
+//			return user;
+//		}
+//		return null;
+//	}
     
 }

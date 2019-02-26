@@ -1,8 +1,0 @@
-package com.bridgelabz.fundoonotes.service;
-
-import com.bridgelabz.fundoonotes.model.UserDetails;
-
-public interface UserService {
-
-	UserDetails register(UserDetails user);
-}
