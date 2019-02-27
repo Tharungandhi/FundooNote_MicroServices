@@ -14,15 +14,18 @@ public class ApplicationConfiguration {
 
 	
 
-	@Bean
-	public WebMvcConfigurer corsConfigurer() {
-		return new WebMvcConfigurerAdapter() {
-			@Override
-			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/**").allowedMethods("GET", "POST", "PUT", "DELETE")
-				.allowedHeaders("token", "Content-Type").exposedHeaders("token", "Content-Type")
-                .allowCredentials(false).maxAge(10000);
-			}
-		};
+	 @SuppressWarnings("deprecation")
+     @Bean
+     public WebMvcConfigurer corsConfigurer() {
+         return new WebMvcConfigurerAdapter() {
+             @Override
+             public void addCorsMappings(CorsRegistry registry) {
+                 registry.addMapping("/**").allowedMethods("GET", "POST", "PUT", "DELETE")
+                         .allowedHeaders("token", "Content-Type")
+                         .exposedHeaders("token", "Content-Type")
+                         .allowCredentials(false).maxAge(4000);
+             }
+         };
+     
 	}
 }

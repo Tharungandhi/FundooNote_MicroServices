@@ -24,7 +24,8 @@ public class ApplicationConfiguration {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
 				registry.addMapping("/**").allowedMethods("GET", "POST", "PUT", "DELETE")
-				.allowedHeaders("token", "Content-Type").exposedHeaders("token", "Content-Type")
+				.allowedHeaders("token", "Content-Type")
+				.exposedHeaders("token", "Content-Type")
                 .allowCredentials(false).maxAge(10000);
 			}
 		};

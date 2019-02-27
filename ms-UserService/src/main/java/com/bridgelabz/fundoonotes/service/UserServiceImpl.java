@@ -50,7 +50,7 @@ public class UserServiceImpl  implements UserService {
 	public String login(UserDetails user, HttpServletRequest request,HttpServletResponse response) 
 	{
 		UserDetails existingUser=userDetailsRepository.getUserByEmailId(user.getEmailId());
-		
+		System.out.println("succesfully logined in");
 		if (bcryptEncoder.matches(user.getPassword(),existingUser.getPassword() ) && existingUser.isActivationStatus()) {
 			String token = generateToken.generateToken(String.valueOf(existingUser.getId()));
 			log.info(token);
