@@ -18,7 +18,6 @@ import com.bridgelabz.fundoonotes.util.GenerateTokenImpl;
 @Service
 public class NoteServiceImpl implements NoteService {
 
-
 	@Autowired
 	GenerateTokenImpl generateToken;
 
@@ -28,30 +27,32 @@ public class NoteServiceImpl implements NoteService {
 	@Autowired
 	LabelDetailsRepository labelDetailsRepository;
 
-	public Note createNote(String token,Note note, HttpServletRequest request) {
+	public Note createNote(String token, Note note, HttpServletRequest request) {
 		int id = generateToken.verifyToken(token);
 		note.setUserId(id);
-		return  noteDetailsRepository.save(note);	
+		return noteDetailsRepository.save(note);
 
 	}
-
 
 	public Note updateNote(int id, String token, Note note, HttpServletRequest request) {
 		int userId = generateToken.verifyToken(token);
-		Optional<Note> optional=noteDetailsRepository.findByuserIdAndId(userId, id);
-		return optional.map(existingNote -> noteDetailsRepository.save(existingNote
-				.setTitle(note.getTitle()).setDiscription(note.getDiscription())))
-				.orElseGet(()->null);
+		Optional<Note> optional = noteDetailsRepository.findByuserIdAndId(userId, id);
+		return optional
+				.map(existingNote -> noteDetailsRepository
+						.save(existingNote.setTitle(note.getTitle()).setDiscription(note.getDiscription())
+								.setArchive(note.isArchive()).setInTrash(note.isInTrash()).setPinned(note.isPinned())))
+				.orElseGet(() -> null);
 	}
 
-
-	public boolean deleteNote(int id,String token,HttpServletRequest request) {
+	public boolean deleteNote(int id, String token, HttpServletRequest request) {
 		int userId = generateToken.verifyToken(token);
-		Optional<Note> optional=noteDetailsRepository.findByuserIdAndId(userId, id);
-		return optional.map(note-> {noteDetailsRepository.delete(note);
-		return true;}).orElseGet(() -> false); 
-				
-		}
+		Optional<Note> optional = noteDetailsRepository.findByuserIdAndId(userId, id);
+		return optional.map(note -> {
+			noteDetailsRepository.delete(note);
+			return true;
+		}).orElseGet(() -> false);
+
+	}
 
 	public List<Note> retrieveNote(String token, HttpServletRequest request) {
 		int userId = generateToken.verifyToken(token);
@@ -62,68 +63,64 @@ public class NoteServiceImpl implements NoteService {
 		return null;
 	}
 
-
-
 	public Label createLabel(String token, Label label, HttpServletRequest request) {
 		int userId = generateToken.verifyToken(token);
 		label.setUserId(userId);
 		return labelDetailsRepository.save(label);
 	}
 
-	public  boolean  deleteLabel(int id,String token, HttpServletRequest request) {
+	public boolean deleteLabel(int id, String token, HttpServletRequest request) {
 		int userId = generateToken.verifyToken(token);
-		Optional<Label> optional=labelDetailsRepository.findByuserIdAndId(userId, id);
-		return optional.map(label -> {labelDetailsRepository.delete(label);
-		return true;
+		Optional<Label> optional = labelDetailsRepository.findByuserIdAndId(userId, id);
+		return optional.map(label -> {
+			labelDetailsRepository.delete(label);
+			return true;
 		}).orElseGet(() -> false);
 
 	}
 
-	public Label updateLabel(int id,String token, Label label, HttpServletRequest request) {
+	public Label updateLabel(int id, String token, Label label, HttpServletRequest request) {
 		int userId = generateToken.verifyToken(token);
 		Optional<Label> optional = labelDetailsRepository.findByuserIdAndId(userId, id);
-		return optional.map(existingLabel-> labelDetailsRepository.save(existingLabel.setLabelName(label.getLabelName()))
-				).orElseGet(() -> null);    	
+		return optional
+				.map(existingLabel -> labelDetailsRepository.save(existingLabel.setLabelName(label.getLabelName())))
+				.orElseGet(() -> null);
 	}
 
-	public List<Label> retrieveLabel(String token, HttpServletRequest request){
+	public List<Label> retrieveLabel(String token, HttpServletRequest request) {
 		int userId = generateToken.verifyToken(token);
 		List<Label> labels = labelDetailsRepository.findAllByUserId(userId);
 		if (!labels.isEmpty()) {
 			return labels;
 		}
-		return null;}
+		return null;
+	}
 
-
-
-	public boolean mapNoteLabel(String token, int noteId, int labelId, HttpServletRequest request) {
-		int userId = generateToken.verifyToken(token);
-		Optional<Label> optional1=labelDetailsRepository.findById(labelId);
-		Optional<Note> optional2=noteDetailsRepository.findById(noteId);
-		if (optional1.isPresent() && optional1.isPresent())
-		{
+	public boolean mapNoteLabel(int noteId, Label existingLabel, HttpServletRequest request) {
+		// int userId = generateToken.verifyToken(token);
+		Optional<Label> optional1 = labelDetailsRepository.findById(existingLabel.getId());
+		Optional<Note> optional2 = noteDetailsRepository.findById(noteId);
+		if (optional1.isPresent() && optional1.isPresent()) {
 			Note note = optional2.get();
 			Label label = optional1.get();
-			if(label.getUserId()==userId && note.getUserId()==userId)
-			{
+			if (label != null && note != null) {
 				List<Label> labels = note.getLabels();
 				labels.add(label);
-				if (!labels.isEmpty())
-				{
+				if (!labels.isEmpty()) {
 					note.setLabels(labels);
 					noteDetailsRepository.save(note);
+					return true;
 				}
-				return true;
-			}}
+			}
+		}
 		return false;
 	}
 
-	@Override
 	public boolean removeNoteLabel(String token, int noteId, int labelId, HttpServletRequest request) {
 		int userId = generateToken.verifyToken(token);
-		Optional<Label> optionallabel=labelDetailsRepository.findById(labelId);
-		Optional<Note> optionalnote=noteDetailsRepository.findById(noteId);
-		if (optionallabel.isPresent() && optionalnote.isPresent()) {   
+		Optional<Label> optionallabel = labelDetailsRepository.findById(labelId);
+		Optional<Note> optionalnote = noteDetailsRepository.findById(noteId);
+		if (optionallabel.isPresent() && optionalnote.isPresent()) {
 			Note note = optionalnote.get();
 			List<Label> labels = note.getLabels();
 			if (!labels.isEmpty()) {
@@ -131,13 +128,9 @@ public class NoteServiceImpl implements NoteService {
 				note.setLabels(labels);
 				noteDetailsRepository.delete(note);
 				return true;
-			} }
+			}
+		}
 		return false;
 	}
 
-
 }
-
-
-
-

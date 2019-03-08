@@ -107,8 +107,9 @@ public class Note implements Serializable {
 		return inTrash;
 	}
 
-	public void setInTrash(boolean inTrash) {
+	public Note setInTrash(boolean inTrash) {
 		this.inTrash = inTrash;
+		return this;
 	}
 
 	public Timestamp getUpdateTime() {
@@ -131,8 +132,9 @@ public class Note implements Serializable {
 		return isArchive;
 	}
 
-	public void setArchive(boolean isArchive) {
+	public Note setArchive(boolean isArchive) {
 		this.isArchive = isArchive;
+		return this;
 	}
 
 	public List<Label> getLabels() {

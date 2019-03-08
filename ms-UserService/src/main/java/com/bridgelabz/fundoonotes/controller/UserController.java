@@ -91,7 +91,7 @@ public class UserController {
 	}
 
 	@DeleteMapping(value = "/delete")
-	public ResponseEntity<String> deleteNote(@RequestHeader("token") String token, HttpServletRequest request) {
+	public ResponseEntity<String> delete(@RequestHeader("token") String token, HttpServletRequest request) {
 		try {
 			if (userService.delete(token, request) != false) {
 				return new ResponseEntity<String>("User Succesfully deleted", HttpStatus.FOUND);

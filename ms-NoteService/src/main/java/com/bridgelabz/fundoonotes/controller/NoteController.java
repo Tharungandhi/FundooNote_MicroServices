@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -39,8 +40,8 @@ public class NoteController {
 			return new ResponseEntity<String>("Denied In Creation of Note",HttpStatus.BAD_REQUEST);
 		}
 	}
-	@PostMapping(value = "/updatenote")
-	public ResponseEntity<String> updateNote(@RequestParam("id") int id, @RequestHeader("token") String token,@RequestBody Note note, HttpServletRequest request)
+	@PutMapping(value = "/updatenote/{id:.+}")
+	public ResponseEntity<String> updateNote(@PathVariable("id") int id, @RequestHeader("token") String token,@RequestBody Note note, HttpServletRequest request)
 	{
 		Note updateNote=noteService.updateNote(id,token,note, request);
 		if (updateNote!=null) {
@@ -50,8 +51,8 @@ public class NoteController {
 	}
 
 
-	@DeleteMapping(value="/deletenote")
-	public ResponseEntity<String> deleteNote(@RequestParam("id") int id ,@RequestHeader("token") String token,HttpServletRequest request)
+	@DeleteMapping(value="/deletenote/{id:.+}")
+	public ResponseEntity<String> deleteNote(@PathVariable("id") int id ,@RequestHeader("token") String token,HttpServletRequest request)
 	{
 		boolean deleteNote=noteService.deleteNote(id,token,request);
 		if (deleteNote!=false) {
@@ -82,12 +83,12 @@ public class NoteController {
 			return new ResponseEntity<String>("Dinied In Creation of Label",HttpStatus.NOT_FOUND);
 		}}
 
-	@DeleteMapping(value="/deletelabel")
-	public ResponseEntity<String> deleteLabel(@RequestParam("id") int id , @RequestHeader("token") String token,HttpServletRequest request)
+	@DeleteMapping(value="/deletelabel/{id:.+}")
+	public ResponseEntity<String> deleteLabel(@PathVariable("id") int id , @RequestHeader("token") String token,HttpServletRequest request)
 	{
 		try {
 			if (noteService.deleteLabel(id,token,request)!=false)
-				return new ResponseEntity<String>("Label Succesfully deleted",HttpStatus.FOUND);
+				return new ResponseEntity<String>("Label Succesfully deleted",HttpStatus.OK);
 			else
 				return  new ResponseEntity<String>("Label not Found by given  Id",HttpStatus.NOT_FOUND);
 		}catch (Exception e) {
@@ -96,8 +97,8 @@ public class NoteController {
 		}
 		return new ResponseEntity<String>("Pls provide details correctly",HttpStatus.CONFLICT);
 	}	
-	@PostMapping(value = "/updatelabel")
-	public ResponseEntity<String> updateLabel(@RequestParam("id") int id, @RequestHeader("token") String token,@RequestBody Label label, HttpServletRequest request)
+	@PutMapping(value = "/updatelabel")
+	public ResponseEntity<String> updateLabel(@PathVariable("id") int id, @RequestHeader("token") String token,@RequestBody Label label, HttpServletRequest request)
 	{
 
 		if (noteService.updateLabel(id,token,label, request)!=null) {
@@ -110,7 +111,7 @@ public class NoteController {
 	public ResponseEntity<?> retrieveLabel(@RequestHeader("token") String token, HttpServletRequest request) {
 		List<Label> listOfLabel = noteService.retrieveLabel(token, request);
 		if (!listOfLabel.isEmpty()) {
-			return new ResponseEntity<List<Label>>(listOfLabel, HttpStatus.FOUND);
+			return new ResponseEntity<List<Label>>(listOfLabel, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<String>("ID incorrect. Please enter valid ID present in database",
 					HttpStatus.NOT_FOUND);
@@ -118,13 +119,12 @@ public class NoteController {
 	}
 
 
-	@PutMapping(value = "/mapnotelabel")
-	public ResponseEntity<?> mapNoteLabel(@RequestParam("noteId") int noteId ,@RequestParam("labelId") int labelId ,@RequestHeader("token") String token, HttpServletRequest request) {
+	@PutMapping(value = "/mapnotelabel/{noteId:.+}")
+	public ResponseEntity<?> mapNoteLabel(@PathVariable("noteId") int noteId ,@RequestBody Label label , HttpServletRequest request) {
 
-		if (noteService.mapNoteLabel(token,noteId,labelId, request)!=false) {
-			return new ResponseEntity<String>("Mapped Successfully", HttpStatus.FOUND);
+		if (noteService.mapNoteLabel(noteId,label, request)!=false) {
+			return new ResponseEntity<Void>( HttpStatus.OK);
 		}else {
-
 			return new ResponseEntity<String>("Dinied In Mapping ",HttpStatus.NOT_FOUND);
 		}
 
