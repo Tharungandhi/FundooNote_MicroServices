@@ -34,7 +34,7 @@ public interface NoteService {
 	
 	boolean mapNoteLabel( int noteId, Label label, HttpServletRequest request);
    
-	boolean removeNoteLabel(String token, int noteId, int labelId, HttpServletRequest request);
+	boolean removeNoteLabel( int noteId, int labelId, HttpServletRequest request);
 	}
 
 

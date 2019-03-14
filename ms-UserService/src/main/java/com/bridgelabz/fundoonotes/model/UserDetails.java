@@ -6,10 +6,18 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.Table;
+
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 
 @Entity
 @Table(name = "UserDetails")
+@Getter
+@Setter
+@Accessors(chain = true)
 public class UserDetails implements Serializable {
 
 	@Id
@@ -32,28 +40,26 @@ public class UserDetails implements Serializable {
 	@Column(name = "activation_status")
 	private boolean activationStatus;
 
-	
-
-	
-
-	
-	
-	
-	
-
-	
-
 	public boolean isActivationStatus() {
 		return activationStatus;
+	}
+
+	@Lob
+	private byte[] image;
+	
+	
+	public byte[] getImage() {
+		return image;
+	}
+
+	public void setImage(byte[] image) {
+		this.image = image;
 	}
 
 	public UserDetails setActivationStatus(boolean activationStatus) {
 		this.activationStatus = activationStatus;
 		return this;
 	}
-
-	
-	
 
 	public int getId() {
 		return id;

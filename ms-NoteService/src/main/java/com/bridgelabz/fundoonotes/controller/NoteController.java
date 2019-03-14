@@ -41,22 +41,22 @@ public class NoteController {
 		}
 	}
 	@PutMapping(value = "/updatenote/{id:.+}")
-	public ResponseEntity<String> updateNote(@PathVariable("id") int id, @RequestHeader("token") String token,@RequestBody Note note, HttpServletRequest request)
+	public ResponseEntity<?> updateNote(@PathVariable("id") int id, @RequestHeader("token") String token,@RequestBody Note note, HttpServletRequest request)
 	{
 		Note updateNote=noteService.updateNote(id,token,note, request);
 		if (updateNote!=null) {
-			return new ResponseEntity<String>("Note Succesfully updated",HttpStatus.OK);
+			return new ResponseEntity<Void>(HttpStatus.OK);
 		} else
 			return new ResponseEntity<String>("Note not Found by given  Id",HttpStatus.BAD_REQUEST);
 	}
 
 
 	@DeleteMapping(value="/deletenote/{id:.+}")
-	public ResponseEntity<String> deleteNote(@PathVariable("id") int id ,@RequestHeader("token") String token,HttpServletRequest request)
+	public ResponseEntity<?> deleteNote(@PathVariable("id") int id ,@RequestHeader("token") String token,HttpServletRequest request)
 	{
 		boolean deleteNote=noteService.deleteNote(id,token,request);
 		if (deleteNote!=false) {
-			return new ResponseEntity<String>("Note Succesfully deleted",HttpStatus.FOUND);
+			return new ResponseEntity<Void>(HttpStatus.OK);
 		} else {
 			return  new ResponseEntity<String>("Note not Found by given  Id",HttpStatus.NOT_FOUND);
 		}        
@@ -84,11 +84,11 @@ public class NoteController {
 		}}
 
 	@DeleteMapping(value="/deletelabel/{id:.+}")
-	public ResponseEntity<String> deleteLabel(@PathVariable("id") int id , @RequestHeader("token") String token,HttpServletRequest request)
+	public ResponseEntity<?> deleteLabel(@PathVariable("id") int id , @RequestHeader("token") String token,HttpServletRequest request)
 	{
 		try {
 			if (noteService.deleteLabel(id,token,request)!=false)
-				return new ResponseEntity<String>("Label Succesfully deleted",HttpStatus.OK);
+				return new ResponseEntity<Void>(HttpStatus.OK);
 			else
 				return  new ResponseEntity<String>("Label not Found by given  Id",HttpStatus.NOT_FOUND);
 		}catch (Exception e) {
@@ -131,9 +131,9 @@ public class NoteController {
 	}
 
 	@DeleteMapping(value="/deletenotelabel")
-	public ResponseEntity<?> deleteNoteLabel(@RequestHeader("token") String token,@RequestParam("noteId") int noteId,@RequestParam("labelId") int labelId ,HttpServletRequest request){
+	public ResponseEntity<?> deleteNoteLabel(@RequestParam("noteId") int noteId,@RequestParam("labelId") int labelId ,HttpServletRequest request){
 
-		if(noteService.removeNoteLabel(token, noteId, labelId, request))	{
+		if(noteService.removeNoteLabel( noteId, labelId, request))	{
 			return new ResponseEntity<String>("NoteLabel Deleted Successfully", HttpStatus.FOUND);
 
 		}else

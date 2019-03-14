@@ -14,8 +14,7 @@ public class ApplicationConfiguration {
 
 	
 
-	 @SuppressWarnings("deprecation")
-     @Bean
+	 @Bean
      public WebMvcConfigurer corsConfigurer() {
          return new WebMvcConfigurerAdapter() {
              @Override

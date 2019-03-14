@@ -1,16 +1,18 @@
 package com.bridgelabz.fundoonotes.service;
 
 
-import java.util.List;
+import java.io.IOException;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.bridgelabz.fundoonotes.dao.UserDetailsRepository;
 import com.bridgelabz.fundoonotes.model.UserDetails;
@@ -124,13 +126,36 @@ public class UserServiceImpl  implements UserService {
 	}
 
 
-//	public List<UserDetails> userDetails(String tableName,HttpServletRequest request) {
-//	
-//		List<UserDetails> user=userDetailsRepository.findAlluser(tableName);
-//		if (!user.isEmpty()) {
-//			return user;
-//		}
-//		return null;
-//	}
-    
+	
+
+
+	@Override
+	public UserDetails uploadImage(String token, MultipartFile imageUpload) {
+		int userId = generateToken.verifyToken(token);
+		System.out.println(userId+" My user ID");
+
+	    UserDetails recipe = userDetailsRepository.findUserById(userId);
+	     try {
+	    	 byte[] bytes = imageUpload.getBytes();
+	    	 System.out.println("My bytes are "+bytes);
+	    	 System.out.println("My User is "+recipe);
+			    String base64 = new String(Base64.encodeBase64(bytes), "ISO-8859-2");
+			recipe.setImage(bytes);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	     recipe= userDetailsRepository.save(recipe);
+	     return recipe;
+	}
+	
+	public UserDetails getUser(String token){
+		int userId = generateToken.verifyToken(token);
+		return userDetailsRepository.findUserById(userId);
 }
+	
+	}
+
+
+	
+    
+

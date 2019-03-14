@@ -1,9 +1,9 @@
 package com.bridgelabz.fundoonotes.service;
 
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.web.multipart.MultipartFile;
 
 import com.bridgelabz.fundoonotes.model.UserDetails;
 
@@ -25,5 +25,5 @@ public interface UserService {
 	
 	UserDetails resetPassword(UserDetails user, String token, HttpServletRequest request);
 	
-//	List<UserDetails> userDetails(String tableName,HttpServletRequest request);
+    UserDetails uploadImage(String token, MultipartFile uploadData);
 }

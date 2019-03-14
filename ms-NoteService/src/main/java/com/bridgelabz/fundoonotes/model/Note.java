@@ -18,6 +18,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 @Table(name = "Note")
+
 public class Note implements Serializable {
 
 	@Id
