@@ -15,10 +15,6 @@ public interface UserDetailsRepository extends JpaRepository<UserDetails, Intege
 
 	Optional<UserDetails> findByEmailId(String emailId);
 
-	UserDetails findUserById(int userId);
-
-
-
 	
 	
 

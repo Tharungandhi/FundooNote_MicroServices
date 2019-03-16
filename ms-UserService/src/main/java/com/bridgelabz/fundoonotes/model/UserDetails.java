@@ -39,21 +39,22 @@ public class UserDetails implements Serializable {
 
 	@Column(name = "activation_status")
 	private boolean activationStatus;
+	
+	@Lob
+	private byte[] image;
 
 	public boolean isActivationStatus() {
 		return activationStatus;
 	}
-
-	@Lob
-	private byte[] image;
 	
 	
 	public byte[] getImage() {
 		return image;
 	}
 
-	public void setImage(byte[] image) {
+	public UserDetails setImage(byte[] image) {
 		this.image = image;
+		return this;
 	}
 
 	public UserDetails setActivationStatus(boolean activationStatus) {

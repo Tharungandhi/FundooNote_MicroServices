@@ -97,12 +97,12 @@ public class NoteController {
 		}
 		return new ResponseEntity<String>("Pls provide details correctly",HttpStatus.CONFLICT);
 	}	
-	@PutMapping(value = "/updatelabel")
-	public ResponseEntity<String> updateLabel(@PathVariable("id") int id, @RequestHeader("token") String token,@RequestBody Label label, HttpServletRequest request)
+	@PutMapping(value = "/updatelabel/{id:.+}")
+	public ResponseEntity<?> updateLabel(@PathVariable("id") int id, @RequestHeader("token") String token,@RequestBody Label label, HttpServletRequest request)
 	{
 
 		if (noteService.updateLabel(id,token,label, request)!=null) {
-			return new ResponseEntity<String>("Note Succesfully updated",HttpStatus.OK);
+			return new ResponseEntity<Void>(HttpStatus.OK);
 		} else {
 			return new ResponseEntity<String>("Note not Found by given  Id",HttpStatus.NOT_FOUND);
 		} }

@@ -130,29 +130,44 @@ public class UserServiceImpl  implements UserService {
 
 
 	@Override
-	public UserDetails uploadImage(String token, MultipartFile imageUpload) {
+	public UserDetails uploadImage(String token, MultipartFile imageUpload) throws IOException {
 		int userId = generateToken.verifyToken(token);
-		System.out.println(userId+" My user ID");
-
-	    UserDetails recipe = userDetailsRepository.findUserById(userId);
-	     try {
-	    	 byte[] bytes = imageUpload.getBytes();
-	    	 System.out.println("My bytes are "+bytes);
-	    	 System.out.println("My User is "+recipe);
-			    String base64 = new String(Base64.encodeBase64(bytes), "ISO-8859-2");
-			recipe.setImage(bytes);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	     recipe= userDetailsRepository.save(recipe);
-	     return recipe;
+	    UserDetails user = userDetailsRepository.findById(userId).get();
+	    	 System.out.println("My User is "+user);
+	    	 user.setImage(imageUpload.getBytes());
+	    	  userDetailsRepository.save(user);
+	     return user;
 	}
 	
-	public UserDetails getUser(String token){
+	@Override
+	public UserDetails getImage(String token){
 		int userId = generateToken.verifyToken(token);
-		return userDetailsRepository.findUserById(userId);
+		return userDetailsRepository.findById(userId).get();
 }
 	
+
+	@Override
+	public UserDetails deleteFile(String token) {
+		UserDetails user = userDetailsRepository.findById(generateToken.verifyToken(token)).get();
+		userDetailsRepository.save(user.setImage(null));
+		return user;
+}
+	
+	public void sendEmail(HttpServletRequest request, UserDetails user, String domainUrl, String message) {
+		String token = generateToken.generateToken(String.valueOf(user.getId()));
+		StringBuffer requestUrl = request.getRequestURL();
+		String activationUrl = requestUrl.substring(0, requestUrl.lastIndexOf("/"));
+		activationUrl += domainUrl + token;
+		emailUtil.sendEmail("", message, activationUrl);
+}
+	
+	@Override
+	public UserDetails colaborator(String token, HttpServletRequest request) {
+		int userId = generateToken.verifyToken(token);
+		Optional<UserDetails> maybeUser = userDetailsRepository.findById(userId);
+		UserDetails user = maybeUser.get();
+		return user;
+}
 	}
 
 

@@ -1,5 +1,7 @@
 package com.bridgelabz.fundoonotes.service;
 
+import java.io.IOException;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -25,5 +27,13 @@ public interface UserService {
 	
 	UserDetails resetPassword(UserDetails user, String token, HttpServletRequest request);
 	
-    UserDetails uploadImage(String token, MultipartFile uploadData);
+    UserDetails uploadImage(String token, MultipartFile uploadData) throws IOException;
+    
+    UserDetails getImage(String token);
+    
+    UserDetails deleteFile(String token);
+
+    void sendEmail(HttpServletRequest request, UserDetails user, String domainUrl, String message);
+    
+    UserDetails colaborator(String token, HttpServletRequest request);
 }

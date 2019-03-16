@@ -1,5 +1,7 @@
 package com.bridgelabz.fundoonotes.controller;
 
+import java.io.IOException;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -127,15 +129,48 @@ public class UserController {
 		}
 	}
 	
-	@PutMapping("/uploadimage/{token:.+}")
+	@PostMapping("/uploadimage/{token:.+}")
 	public ResponseEntity<?> uploadFile(@PathVariable ("token")String token,@RequestParam ("file")
-	MultipartFile  imageUpload ) {	      
-		if( userService.uploadImage(token,imageUpload)==null)
+	MultipartFile  imageUpload ) throws IOException {	      
+		if( userService.uploadImage(token,imageUpload)!=null)
 			return new ResponseEntity<String>("Successfully uploaded", HttpStatus.OK);
 
 		else
 			return new ResponseEntity<String>("Something went wrong",HttpStatus.NOT_FOUND);
 
 }
+	
+	@GetMapping("uploadimage")
+    public ResponseEntity<?> downloadFile(@RequestHeader("token") String token) {
+        UserDetails user = userService.getImage(token);
+        if(user!=null)
+			return new ResponseEntity<UserDetails>(user,HttpStatus.OK);
+        return new ResponseEntity<String>("Couldnot download the image", HttpStatus.CONFLICT);
+}
+	
+	@DeleteMapping("uploadimage")
+    public ResponseEntity<?> deleteFile(@RequestHeader("token") String token) {
+		UserDetails user = userService.deleteFile(token);
+        if(user!=null)
+			return new ResponseEntity<Void>(HttpStatus.OK);
+        return new ResponseEntity<String>("Couldnot delete the image", HttpStatus.CONFLICT);
+}
+	@GetMapping(value = "colaborator")
+	public ResponseEntity<?> colaborator(@RequestHeader("token") String token, HttpServletRequest request) {
+		UserDetails user = userService.colaborator(token, request);
+		if (user != null)
+			return new ResponseEntity<UserDetails>(user, HttpStatus.OK);
+		return new ResponseEntity<String>("user not found", HttpStatus.NOT_FOUND);
+	}
+	
+//	@GetMapping(value = "verifyemail/{emailId:.+}")
+//	public ResponseEntity<?> verifyEmail(@RequestHeader("token") String token,@PathVariable("emailId") String email, HttpServletRequest request) {
+//		UserDetails newUser=userService.verifyEmail(token,email,request);
+//		if (newUser!=null)
+//			return new ResponseEntity<UserDetails>(newUser,HttpStatus.OK);
+//		return new ResponseEntity<String>("user not found", HttpStatus.NOT_FOUND);
+//}
+	
+
 
 }
