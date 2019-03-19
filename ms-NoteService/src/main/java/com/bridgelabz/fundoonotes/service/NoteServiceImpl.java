@@ -1,5 +1,6 @@
 package com.bridgelabz.fundoonotes.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -9,8 +10,10 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.bridgelabz.fundoonotes.dao.CollaboratorRepository;
 import com.bridgelabz.fundoonotes.dao.LabelDetailsRepository;
 import com.bridgelabz.fundoonotes.dao.NoteDetailsRepository;
+import com.bridgelabz.fundoonotes.model.Collaborator;
 import com.bridgelabz.fundoonotes.model.Label;
 import com.bridgelabz.fundoonotes.model.Note;
 import com.bridgelabz.fundoonotes.util.GenerateTokenImpl;
@@ -26,6 +29,9 @@ public class NoteServiceImpl implements NoteService {
 
 	@Autowired
 	LabelDetailsRepository labelDetailsRepository;
+	
+	@Autowired
+	CollaboratorRepository collaboratorRepository;
 
 	public Note createNote(String token, Note note, HttpServletRequest request) {
 		int id = generateToken.verifyToken(token);
@@ -40,7 +46,7 @@ public class NoteServiceImpl implements NoteService {
 		return optional
 				.map(existingNote -> noteDetailsRepository
 						.save(existingNote.setTitle(note.getTitle()).setDiscription(note.getDiscription())
-								.setArchive(note.isArchive()).setInTrash(note.isInTrash()).setColour(note.getColour()).setPinned(note.isPinned())))
+								.setArchive(note.isArchive()).setInTrash(note.isInTrash()).setColor(note.getColor()).setPinned(note.isPinned())))
 				.orElseGet(() -> null);
 	}
 
@@ -56,11 +62,18 @@ public class NoteServiceImpl implements NoteService {
 
 	public List<Note> retrieveNote(String token, HttpServletRequest request) {
 		int userId = generateToken.verifyToken(token);
-		List<Note> notes = noteDetailsRepository.findAllByUserId(userId);
-		if (!notes.isEmpty()) {
-			return notes;
+		List<Note> notes=new ArrayList<>();
+		List<Collaborator> collaborators=collaboratorRepository.findAllByUserId(userId);
+		for(Collaborator collaborator:collaborators)
+		{
+			notes.add(noteDetailsRepository.findById(collaborator.getNoteId()).get());
 		}
-		return null;
+		List<Note> newNotes = noteDetailsRepository.findAllByUserId(userId);
+		notes.addAll(newNotes);
+//		if (!newNotes.isEmpty()) {
+//			return notes;
+//		}
+		return notes;
 	}
 
 	public Label createLabel(String token, Label label, HttpServletRequest request) {
@@ -130,5 +143,24 @@ public class NoteServiceImpl implements NoteService {
 		}
 		return false;
 	}
+	
+	@Override
+	public boolean createCollaborator(String token, int noteId, int userId) {
+		Collaborator collaborator = new Collaborator();
+		collaborator = collaboratorRepository.save(collaborator.setNoteId(noteId).setUserId(userId));
+		if (collaborator != null)
+			return true;
+		return false;
+	}
+
+	@Override
+	public boolean removeCollaborator(int userId, int noteId) {
+		Collaborator collaborator = collaboratorRepository.findByNoteIdAndUserId(noteId, userId).get();
+		if (collaborator != null) {
+			collaboratorRepository.delete(collaborator);
+			return true;
+		}
+		return false;
+}
 
 }

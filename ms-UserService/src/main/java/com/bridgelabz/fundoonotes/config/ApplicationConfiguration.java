@@ -1,5 +1,7 @@
 package com.bridgelabz.fundoonotes.config;
 
+import javax.validation.Validation;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -17,6 +19,12 @@ public class ApplicationConfiguration {
 	public BCryptPasswordEncoder getPasswordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
+	
+
+	@Bean
+	public Validation userValidator() {
+		return new Validation();
+}
 
 	@Bean
 	public WebMvcConfigurer corsConfigurer() {

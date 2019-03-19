@@ -2,6 +2,7 @@ package com.bridgelabz.fundoonotes.service;
 
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
@@ -147,19 +148,13 @@ public class UserServiceImpl  implements UserService {
 	
 
 	@Override
-	public UserDetails deleteFile(String token) {
+	public UserDetails deleteImage(String token) {
 		UserDetails user = userDetailsRepository.findById(generateToken.verifyToken(token)).get();
 		userDetailsRepository.save(user.setImage(null));
 		return user;
 }
 	
-	public void sendEmail(HttpServletRequest request, UserDetails user, String domainUrl, String message) {
-		String token = generateToken.generateToken(String.valueOf(user.getId()));
-		StringBuffer requestUrl = request.getRequestURL();
-		String activationUrl = requestUrl.substring(0, requestUrl.lastIndexOf("/"));
-		activationUrl += domainUrl + token;
-		emailUtil.sendEmail("", message, activationUrl);
-}
+	
 	
 	@Override
 	public UserDetails colaborator(String token, HttpServletRequest request) {
@@ -168,6 +163,26 @@ public class UserServiceImpl  implements UserService {
 		UserDetails user = maybeUser.get();
 		return user;
 }
+	
+	
+	public UserDetails collaboratedUser(int userId) {
+		UserDetails user=userDetailsRepository.findById(userId).get();
+		return user;
+	}
+	
+
+	@Override
+	public UserDetails verifyEmail(String token, String email, HttpServletRequest request) {
+		UserDetails user = userDetailsRepository.findById(generateToken.verifyToken(token)).get();
+		List<UserDetails> users = userDetailsRepository.findAllByEmailId(email);
+		if (users.size() == 1) {
+			UserDetails newUser = users.get(0);
+			return newUser;
+		}
+		return null;
+}
+
+	
 	}
 
 

@@ -9,7 +9,6 @@
 <fullyQualifiedTypeName name="springfox.documentation.builders.PathSelectors"/>
 <fullyQualifiedTypeName name="java.io.Serializable"/>
 <fullyQualifiedTypeName name="org.hibernate.annotations.UpdateTimestamp"/>
-<fullyQualifiedTypeName name="java.sql.Timestamp"/>
 <fullyQualifiedTypeName name="io.jsonwebtoken.Claims"/>
 <fullyQualifiedTypeName name="io.jsonwebtoken.Jwts"/>
 <fullyQualifiedTypeName name="javax.xml.bind.DatatypeConverter"/>
@@ -22,14 +21,12 @@
 <fullyQualifiedTypeName name="com.bridgelabz.fundoonotes.util.GenerateJWT"/>
 <fullyQualifiedTypeName name="javax.persistence.Id"/>
 <fullyQualifiedTypeName name="javax.persistence.GeneratedValue"/>
-<fullyQualifiedTypeName name="javax.persistence.Column"/>
 <fullyQualifiedTypeName name="javax.persistence.Entity"/>
 <fullyQualifiedTypeName name="javax.persistence.Table"/>
 <fullyQualifiedTypeName name="org.springframework.stereotype.Repository"/>
 <fullyQualifiedTypeName name="org.springframework.beans.factory.annotation.Autowired"/>
 <fullyQualifiedTypeName name="com.bridgelabz.fundoonotes.dao.LabelDetailsRepository"/>
 <fullyQualifiedTypeName name="java.util.List"/>
-<fullyQualifiedTypeName name="org.springframework.web.bind.annotation.PostMapping"/>
 <fullyQualifiedTypeName name="javax.persistence.JoinTable"/>
 <fullyQualifiedTypeName name="javax.persistence.ManyToMany"/>
 <fullyQualifiedTypeName name="javax.persistence.FetchType"/>
@@ -56,8 +53,11 @@
 <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.RequestHeader"/>
 <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.RequestParam"/>
 <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.PutMapping"/>
-<fullyQualifiedTypeName name="org.springframework.http.ResponseEntity"/>
 <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.RequestBody"/>
 <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.PathVariable"/>
 <fullyQualifiedTypeName name="com.bridgelabz.fundoonotes.model.UserDetails"/>
+<fullyQualifiedTypeName name="java.sql.Timestamp"/>
+<fullyQualifiedTypeName name="javax.persistence.Column"/>
+<fullyQualifiedTypeName name="org.springframework.web.bind.annotation.PostMapping"/>
+<fullyQualifiedTypeName name="org.springframework.http.ResponseEntity"/>
 </qualifiedTypeNameHistroy>

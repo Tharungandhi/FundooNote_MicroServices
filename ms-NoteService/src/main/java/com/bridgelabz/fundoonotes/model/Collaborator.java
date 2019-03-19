@@ -7,11 +7,12 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
-@Table(name="Collaborator")
+@Table(name="Collaborator",uniqueConstraints = @UniqueConstraint(columnNames = { "userId", "noteId" }))
 public class Collaborator {
 
 	@Id
@@ -41,24 +42,27 @@ public class Collaborator {
 		return noteId;
 	}
 
-	public void setNoteId(int noteId) {
+	public Collaborator setNoteId(int noteId) {
 		this.noteId = noteId;
+		return this;
 	}
 
 	public int getUserId() {
 		return userId;
 	}
 
-	public void setUserId(int userId) {
+	public Collaborator setUserId(int userId) {
 		this.userId = userId;
+		return this;
 	}
 
 	public Timestamp getUpdatedTime() {
 		return updatedTime;
 	}
 
-	public void setUpdatedTime(Timestamp updatedTime) {
+	public Collaborator setUpdatedTime(Timestamp updatedTime) {
 		this.updatedTime = updatedTime;
+		return this;
 	}
 
 	

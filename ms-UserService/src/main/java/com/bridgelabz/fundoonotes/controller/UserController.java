@@ -150,12 +150,14 @@ public class UserController {
 	
 	@DeleteMapping("uploadimage")
     public ResponseEntity<?> deleteFile(@RequestHeader("token") String token) {
-		UserDetails user = userService.deleteFile(token);
+		UserDetails user = userService.deleteImage(token);
         if(user!=null)
 			return new ResponseEntity<Void>(HttpStatus.OK);
         return new ResponseEntity<String>("Couldnot delete the image", HttpStatus.CONFLICT);
 }
-	@GetMapping(value = "colaborator")
+	
+	
+	@GetMapping("colaborator")
 	public ResponseEntity<?> colaborator(@RequestHeader("token") String token, HttpServletRequest request) {
 		UserDetails user = userService.colaborator(token, request);
 		if (user != null)
@@ -163,14 +165,20 @@ public class UserController {
 		return new ResponseEntity<String>("user not found", HttpStatus.NOT_FOUND);
 	}
 	
-//	@GetMapping(value = "verifyemail/{emailId:.+}")
-//	public ResponseEntity<?> verifyEmail(@RequestHeader("token") String token,@PathVariable("emailId") String email, HttpServletRequest request) {
-//		UserDetails newUser=userService.verifyEmail(token,email,request);
-//		if (newUser!=null)
-//			return new ResponseEntity<UserDetails>(newUser,HttpStatus.OK);
-//		return new ResponseEntity<String>("user not found", HttpStatus.NOT_FOUND);
-//}
+	@GetMapping(value = "verifyemail/{emailId:.+}")
+	public ResponseEntity<?> verifyEmail(@RequestHeader("token") String token,@PathVariable("emailId") String email, HttpServletRequest request) {
+		UserDetails newUser=userService.verifyEmail(token,email,request);
+		if (newUser!=null)
+			return new ResponseEntity<UserDetails>(newUser,HttpStatus.OK);
+		return new ResponseEntity<String>("user not found", HttpStatus.NOT_FOUND);
+}
 	
-
+	@GetMapping("collaborateduser/{userId}")
+    public ResponseEntity<?> getCollaboratedUser(@PathVariable("userId") int userId) {
+		UserDetails user = userService.collaboratedUser(userId);
+        if(user!=null)
+			return new ResponseEntity<UserDetails>(user,HttpStatus.OK);
+        return new ResponseEntity<String>("Couldnot delete the image", HttpStatus.CONFLICT);
+}
 
 }

@@ -31,9 +31,11 @@ public interface UserService {
     
     UserDetails getImage(String token);
     
-    UserDetails deleteFile(String token);
-
-    void sendEmail(HttpServletRequest request, UserDetails user, String domainUrl, String message);
+    UserDetails deleteImage(String token);
     
     UserDetails colaborator(String token, HttpServletRequest request);
+    
+    UserDetails collaboratedUser(int userId);
+    
+    UserDetails verifyEmail(String token, String email, HttpServletRequest request);
 }

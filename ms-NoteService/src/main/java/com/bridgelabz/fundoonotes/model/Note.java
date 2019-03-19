@@ -45,8 +45,8 @@ public class Note implements Serializable {
 	@Column(name = "userId")
 	private int userId;
 	
-	@Column(name ="colour")
-	private String colour;
+	@Column(name ="color")
+	private String color;
 
 	@ManyToMany(fetch = FetchType.EAGER, targetEntity = Label.class, cascade = {CascadeType.ALL })
 	@JoinTable(name = "Note_Label", joinColumns = { @JoinColumn(name = "noteId") }, inverseJoinColumns = {
@@ -149,12 +149,12 @@ public class Note implements Serializable {
 		this.labels = labels;
 	}
 
-	public String getColour() {
-		return colour;
+	public String getColor() {
+		return color;
 	}
 
-	public Note setColour(String colour) {
-		this.colour = colour;
+	public Note setColor(String color) {
+		this.color = color;
 		return this;
 	}
 
