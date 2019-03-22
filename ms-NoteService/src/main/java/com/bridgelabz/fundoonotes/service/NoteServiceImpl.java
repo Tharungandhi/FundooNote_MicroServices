@@ -46,7 +46,7 @@ public class NoteServiceImpl implements NoteService {
 		return optional
 				.map(existingNote -> noteDetailsRepository
 						.save(existingNote.setTitle(note.getTitle()).setDiscription(note.getDiscription())
-								.setArchive(note.isArchive()).setInTrash(note.isInTrash()).setColor(note.getColor()).setPinned(note.isPinned())))
+								.setArchive(note.isArchive()).setInTrash(note.isInTrash()).setColor(note.getColor()).setReminder(note.getReminder()).setPinned(note.isPinned())))
 				.orElseGet(() -> null);
 	}
 
@@ -70,9 +70,6 @@ public class NoteServiceImpl implements NoteService {
 		}
 		List<Note> newNotes = noteDetailsRepository.findAllByUserId(userId);
 		notes.addAll(newNotes);
-//		if (!newNotes.isEmpty()) {
-//			return notes;
-//		}
 		return notes;
 	}
 

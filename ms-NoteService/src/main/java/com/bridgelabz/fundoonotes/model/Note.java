@@ -48,6 +48,11 @@ public class Note implements Serializable {
 	@Column(name ="color")
 	private String color;
 
+	@Column(name="reminder")
+	private Timestamp reminder;
+	
+	
+	
 	@ManyToMany(fetch = FetchType.EAGER, targetEntity = Label.class, cascade = {CascadeType.ALL })
 	@JoinTable(name = "Note_Label", joinColumns = { @JoinColumn(name = "noteId") }, inverseJoinColumns = {
 			@JoinColumn(name = "labelId") })
@@ -158,4 +163,14 @@ public class Note implements Serializable {
 		return this;
 	}
 
+	public Timestamp getReminder() {
+		return reminder;
+	}
+
+	public Note setReminder(Timestamp reminder) {
+		this.reminder = reminder;
+		return this;
+	}
+
+	
 }

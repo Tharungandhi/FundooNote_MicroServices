@@ -165,6 +165,8 @@ public class UserController {
 		return new ResponseEntity<String>("user not found", HttpStatus.NOT_FOUND);
 	}
 	
+	
+	
 	@GetMapping(value = "verifyemail/{emailId:.+}")
 	public ResponseEntity<?> verifyEmail(@RequestHeader("token") String token,@PathVariable("emailId") String email, HttpServletRequest request) {
 		UserDetails newUser=userService.verifyEmail(token,email,request);
