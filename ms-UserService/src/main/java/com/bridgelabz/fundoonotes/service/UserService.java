@@ -1,6 +1,7 @@
 package com.bridgelabz.fundoonotes.service;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -38,4 +39,8 @@ public interface UserService {
     UserDetails collaboratedUser(int userId);
     
     UserDetails verifyEmail(String token, String email, HttpServletRequest request);
+    
+    List<UserDetails> allUsers(HttpServletRequest request) ;
+    
+    UserDetails getCollaboratedUser(int userId);
 }

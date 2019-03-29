@@ -1,10 +1,12 @@
 package com.bridgelabz.fundoonotes.service;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.bridgelabz.fundoonotes.model.Label;
 import com.bridgelabz.fundoonotes.model.Note;
@@ -39,6 +41,12 @@ public interface NoteService {
 	boolean createCollaborator(String token, int noteId, int userId);
 	
 	boolean removeCollaborator(int userId, int noteId);
+	
+	Note deleteImage(String token);
+	
+	 Note getImage(String token);
+	 
+	 Note uploadImage(String token, MultipartFile imageUpload) throws IOException ;
 	}
 
 

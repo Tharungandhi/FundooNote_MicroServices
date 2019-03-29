@@ -1,5 +1,6 @@
 package com.bridgelabz.fundoonotes.service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -9,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.bridgelabz.fundoonotes.dao.CollaboratorRepository;
 import com.bridgelabz.fundoonotes.dao.LabelDetailsRepository;
@@ -45,8 +47,7 @@ public class NoteServiceImpl implements NoteService {
 	}
 
 	public Note updateNote(int id, String token, Note note, HttpServletRequest request) {
-		int userId = generateToken.verifyToken(token);
-		Optional<Note> optional = noteDetailsRepository.findByuserIdAndId(userId, id);
+		Optional<Note> optional = noteDetailsRepository.findById(id);
 		return optional
 				.map(existingNote -> noteDetailsRepository
 						.save(existingNote.setTitle(note.getTitle()).setDiscription(note.getDiscription())
@@ -70,7 +71,7 @@ public class NoteServiceImpl implements NoteService {
 		List<Collaborator> collaborators=collaboratorRepository.findAllByUserId(userId);
 		for(Collaborator collaborator:collaborators)
 		{
-			notes.add(noteDetailsRepository.findById(collaborator.getNoteId()).get());
+			notes.add(noteDetailsRepository.findById(collaborator.getId()).get());
 		}
 		List<Note> newNotes = noteDetailsRepository.findAllByUserId(userId);
 		notes.addAll(newNotes);
@@ -145,25 +146,52 @@ public class NoteServiceImpl implements NoteService {
 		return false;
 	}
 	
+	
+
 	@Override
-	public boolean createCollaborator(String token, int noteId, int userId) {
-		Collaborator collaborator = new Collaborator();
-		collaborator = collaboratorRepository.save(collaborator.setNoteId(noteId).setUserId(userId));
-		if (collaborator != null) {
-			emailUtil.sendEmail("","Note has been added", "");
-			return true;
+	public Note uploadImage(String token, MultipartFile imageUpload) throws IOException {
+		int userId = generateToken.verifyToken(token);
+		Note note = noteDetailsRepository.findById(userId).get();
+	    	 System.out.println("My Note is "+note);
+	    	 note.setNoteImage(imageUpload.getBytes());
+	    	 noteDetailsRepository.save(note);
+	     return note;
 	}
-		return false;
-		}
+	
+	@Override
+	public Note getImage(String token){
+		int userId = generateToken.verifyToken(token);
+		return noteDetailsRepository.findById(userId).get();
+}
+	
 
 	@Override
-	public boolean removeCollaborator(int userId, int noteId) {
-		Collaborator collaborator = collaboratorRepository.findByNoteIdAndUserId(noteId, userId).get();
-		if (collaborator != null) {
-			collaboratorRepository.delete(collaborator);
-			return true;
-		}
-		return false;
+	public Note deleteImage(String token) {
+		Note note = noteDetailsRepository.findById(generateToken.verifyToken(token)).get();
+		noteDetailsRepository.save(note.setNoteImage(null));
+		return note;
 }
-
+	
+	
+	public boolean createCollaborator(String token, int id, int userId) {
+        Collaborator collaborator = new Collaborator();
+        collaborator = collaboratorRepository.save(collaborator.setId(id).setUserId(userId));
+        if (collaborator != null) {
+            emailUtil.sendEmail("", "Note has been added to your Fundoo Note", "");
+            return true;
+        }
+return false;
+   }
+   
+   
+    @Override
+    public boolean removeCollaborator(int userId, int id) {
+        Collaborator collaborator = collaboratorRepository.findByIdAndUserId(id, userId).get();
+        if (collaborator != null) {
+            collaboratorRepository.delete(collaborator);
+            return true;
+        }
+        return false;
+}
+	
 }

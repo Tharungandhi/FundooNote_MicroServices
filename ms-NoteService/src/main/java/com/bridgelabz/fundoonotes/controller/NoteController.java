@@ -1,5 +1,6 @@
 package com.bridgelabz.fundoonotes.controller;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.bridgelabz.fundoonotes.model.Label;
 import com.bridgelabz.fundoonotes.model.Note;
@@ -31,11 +33,11 @@ public class NoteController {
 	private NoteService noteService;
 
 	@PostMapping(value = "/createnote")
-	public ResponseEntity<String> createNote( @RequestHeader("token") String token,@RequestBody Note note, HttpServletRequest request) {
+	public ResponseEntity<?> createNote( @RequestHeader("token") String token,@RequestBody Note note, HttpServletRequest request) {
 
 		Note newNote=noteService.createNote(token, note, request);
 		if (newNote!=null) {
-			return new ResponseEntity<String>("Note Succesfully Created",HttpStatus.OK);
+			return new ResponseEntity<Void>(HttpStatus.OK);
 		} else {
 			return new ResponseEntity<String>("Denied In Creation of Note",HttpStatus.BAD_REQUEST);
 		}
@@ -78,25 +80,22 @@ public class NoteController {
 	public ResponseEntity<?> createLabel( @RequestHeader("token") String token, @RequestBody Label label, HttpServletRequest request) {
 		Label newlabel=noteService.createLabel(token,label, request);
 		if (newlabel!=null) {
-			return new ResponseEntity<String>("Label Succesfully Created",HttpStatus.OK);
+			return new ResponseEntity<Void>(HttpStatus.OK);
 		} else {
-			return new ResponseEntity<String>("Dinied In Creation of Label",HttpStatus.NOT_FOUND);
+			return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
 		}}
 
 	@DeleteMapping(value="/deletelabel/{id:.+}")
 	public ResponseEntity<?> deleteLabel(@PathVariable("id") int id , @RequestHeader("token") String token,HttpServletRequest request)
 	{
-		try {
+		
 			if (noteService.deleteLabel(id,token,request)!=false)
 				return new ResponseEntity<Void>(HttpStatus.OK);
 			else
-				return  new ResponseEntity<String>("Label not Found by given  Id",HttpStatus.NOT_FOUND);
-		}catch (Exception e) {
-			e.printStackTrace();
+				return  new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
 
 		}
-		return new ResponseEntity<String>("Pls provide details correctly",HttpStatus.CONFLICT);
-	}	
+	
 	@PutMapping(value = "/updatelabel/{id:.+}")
 	public ResponseEntity<?> updateLabel(@PathVariable("id") int id, @RequestHeader("token") String token,@RequestBody Label label, HttpServletRequest request)
 	{
@@ -134,7 +133,7 @@ public class NoteController {
 	public ResponseEntity<?> deleteNoteLabel(@RequestParam("noteId") int noteId,@RequestParam("labelId") int labelId ,HttpServletRequest request){
 
 		if(noteService.removeNoteLabel( noteId, labelId, request))	{
-			return new ResponseEntity<String>("NoteLabel Deleted Successfully", HttpStatus.FOUND);
+			return new ResponseEntity<Void>( HttpStatus.FOUND);
 
 		}else
 		{
@@ -144,10 +143,10 @@ public class NoteController {
 	}
 	
 	
-	@PostMapping(value = "createcollaborator/{noteId}/{userId}")
-	public ResponseEntity<?> createCollaborator(@RequestHeader("token") String token, @PathVariable("noteId") int noteId,
+	@PostMapping(value = "createcollaborator/{id}/{userId}")
+	public ResponseEntity<?> createCollaborator(@RequestHeader("token") String token, @PathVariable("noteId") int id,
 			@PathVariable("userId") int userId,HttpServletRequest request) {
-		if (noteService.createCollaborator(token, noteId, userId))
+		if (noteService.createCollaborator(token, id, userId))
 			return new ResponseEntity<Void>(HttpStatus.OK);
 		return new ResponseEntity<String>("There was a issue raised cannot create a collaborator", HttpStatus.CONFLICT);
 	}
@@ -156,6 +155,33 @@ public class NoteController {
     public ResponseEntity<?> removeCollaborator(@PathVariable("userId") int userId,
     		@PathVariable("noteId") int noteId) {
         if(noteService.removeCollaborator(userId,noteId))
+			return new ResponseEntity<Void>(HttpStatus.OK);
+        return new ResponseEntity<String>("Couldnot delete the image", HttpStatus.CONFLICT);
+}
+	
+	@PostMapping("/uploadimage/{token:.+}")
+	public ResponseEntity<?> uploadFile(@PathVariable ("token")String token,@RequestParam ("file")
+	MultipartFile  imageUpload ) throws IOException {	      
+		if( noteService.uploadImage(token,imageUpload)!=null)
+			return new ResponseEntity<String>("Successfully uploaded", HttpStatus.OK);
+
+		else
+			return new ResponseEntity<String>("Something went wrong",HttpStatus.NOT_FOUND);
+
+}
+	
+	@GetMapping("uploadimage")
+    public ResponseEntity<?> downloadFile(@RequestHeader("token") String token) {
+        Note note = noteService.getImage(token);
+        if(note!=null)
+			return new ResponseEntity<Note>(note,HttpStatus.OK);
+        return new ResponseEntity<String>("Couldnot download the image", HttpStatus.CONFLICT);
+}
+	
+	@DeleteMapping("uploadimage")
+    public ResponseEntity<?> deleteFile(@RequestHeader("token") String token) {
+		Note user = noteService.deleteImage(token);
+        if(user!=null)
 			return new ResponseEntity<Void>(HttpStatus.OK);
         return new ResponseEntity<String>("Couldnot delete the image", HttpStatus.CONFLICT);
 }

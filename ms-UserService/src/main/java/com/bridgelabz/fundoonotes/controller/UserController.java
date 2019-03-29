@@ -1,6 +1,7 @@
 package com.bridgelabz.fundoonotes.controller;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -129,7 +130,7 @@ public class UserController {
 		}
 	}
 	
-	@PostMapping("/uploadimage/{token:.+}")
+	@PostMapping(value="/uploadimage/{token:.+}")
 	public ResponseEntity<?> uploadFile(@PathVariable ("token")String token,@RequestParam ("file")
 	MultipartFile  imageUpload ) throws IOException {	      
 		if( userService.uploadImage(token,imageUpload)!=null)
@@ -140,7 +141,7 @@ public class UserController {
 
 }
 	
-	@GetMapping("uploadimage")
+	@GetMapping(value="uploadimage")
     public ResponseEntity<?> downloadFile(@RequestHeader("token") String token) {
         UserDetails user = userService.getImage(token);
         if(user!=null)
@@ -148,7 +149,7 @@ public class UserController {
         return new ResponseEntity<String>("Couldnot download the image", HttpStatus.CONFLICT);
 }
 	
-	@DeleteMapping("uploadimage")
+	@DeleteMapping(value="uploadimage")
     public ResponseEntity<?> deleteFile(@RequestHeader("token") String token) {
 		UserDetails user = userService.deleteImage(token);
         if(user!=null)
@@ -157,7 +158,7 @@ public class UserController {
 }
 	
 	
-	@GetMapping("colaborator")
+	@GetMapping(value="colaborator")
 	public ResponseEntity<?> colaborator(@RequestHeader("token") String token, HttpServletRequest request) {
 		UserDetails user = userService.colaborator(token, request);
 		if (user != null)
@@ -177,10 +178,18 @@ public class UserController {
 	
 	@GetMapping("collaborateduser/{userId}")
     public ResponseEntity<?> getCollaboratedUser(@PathVariable("userId") int userId) {
-		UserDetails user = userService.collaboratedUser(userId);
+		UserDetails user = userService.getCollaboratedUser(userId);
         if(user!=null)
-			return new ResponseEntity<UserDetails>(user,HttpStatus.OK);
+            return new ResponseEntity<UserDetails>(user,HttpStatus.OK);
         return new ResponseEntity<String>("Couldnot delete the image", HttpStatus.CONFLICT);
 }
+	
+	@GetMapping(value = "allusers")
+    public ResponseEntity<?> allUsers(HttpServletRequest request) {
+        List<UserDetails> users = userService.allUsers(request);
+        if (!users.isEmpty())
+            return new ResponseEntity<List<UserDetails>>(users, HttpStatus.OK);
+        return new ResponseEntity<String>("couldnot reset the password", HttpStatus.NOT_FOUND);
+    }
 
 }

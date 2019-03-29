@@ -11,60 +11,65 @@ import javax.persistence.UniqueConstraint;
 
 import org.hibernate.annotations.UpdateTimestamp;
 
+
 @Entity
-@Table(name="Collaborator",uniqueConstraints = @UniqueConstraint(columnNames = { "userId", "noteId" }))
+@Table(name = "Collaborator", uniqueConstraints = @UniqueConstraint(columnNames = { "userId", "id" }))
 public class Collaborator {
 
-	@Id
-	@GeneratedValue
-	@Column(name="collaboratorId")
-	private int collaboratorId;
 	
-	@Column(name="noteId")
-	private int noteId;
-	
-	@Column(name="userId")
-	private int userId;
-	
-	@Column(name="updatedTime")
-	@UpdateTimestamp
-	private Timestamp updatedTime;
+	    @Id
+	    @GeneratedValue
+	    @Column (name = "colaborateId")
+	    private int colaborateId;
 
-	public int getCollaboratorId() {
-		return collaboratorId;
-	}
+	    @Column(name = "userId")
+	    private int userId;
 
-	public void setCollaboratorId(int collaboratorId) {
-		this.collaboratorId = collaboratorId;
-	}
+	    @Column(name = "id")
+	    private int id;
 
-	public int getNoteId() {
-		return noteId;
-	}
+	    @Column(name = "updatedTime")
+	    @UpdateTimestamp
+	    private Timestamp updatedTime;
 
-	public Collaborator setNoteId(int noteId) {
-		this.noteId = noteId;
-		return this;
-	}
+	    
+	    
+		public int getColaborateId() {
+			return colaborateId;
+		}
 
-	public int getUserId() {
-		return userId;
-	}
+		public Collaborator setColaborateId(int colaborateId) {
+			this.colaborateId = colaborateId;
+			return this;
+		}
 
-	public Collaborator setUserId(int userId) {
-		this.userId = userId;
-		return this;
-	}
+		public int getUserId() {
+			return userId;
+		}
 
-	public Timestamp getUpdatedTime() {
-		return updatedTime;
-	}
+		public Collaborator setUserId(int userId) {
+			this.userId = userId;
+			return this;
+		}
 
-	public Collaborator setUpdatedTime(Timestamp updatedTime) {
-		this.updatedTime = updatedTime;
-		return this;
-	}
+		public int getId() {
+			return id;
+		}
 
-	
-	
+		public Collaborator setId(int id) {
+			this.id = id;
+			return this;
+		}
+
+		public Timestamp getUpdatedTime() {
+			return updatedTime;
+		}
+
+		public Collaborator setUpdatedTime(Timestamp updatedTime) {
+			this.updatedTime = updatedTime;
+			return this;
+		}
+	    
+	    
+	    
 }

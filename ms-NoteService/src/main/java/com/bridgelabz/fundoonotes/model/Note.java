@@ -11,7 +11,9 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinTable;
+import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.JoinColumn;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -51,12 +53,24 @@ public class Note implements Serializable {
 	@Column(name="reminder")
 	private Timestamp reminder;
 	
+	@Column(name = "createdTime")
+	@UpdateTimestamp
+	private Timestamp createdTime;
+
+	@Column(name = "isArchive")
+	private boolean isArchive;
+	
+	@Lob
+	private byte[] noteImage;
 	
 	
 	@ManyToMany(fetch = FetchType.EAGER, targetEntity = Label.class, cascade = {CascadeType.ALL })
 	@JoinTable(name = "Note_Label", joinColumns = { @JoinColumn(name = "noteId") }, inverseJoinColumns = {
 			@JoinColumn(name = "labelId") })
 	private List<Label> labels;
+	
+	@OneToMany(mappedBy = "id")
+    private List<Collaborator> collaborators;
 	
 	public int getUserId() {
 		return userId;
@@ -66,12 +80,7 @@ public class Note implements Serializable {
 		this.userId = userId;
 	}
 
-	@Column(name = "createdTime")
-	@UpdateTimestamp
-	private Timestamp createdTime;
-
-	@Column(name = "isArchive")
-	private boolean isArchive;
+	
 
 	
 
@@ -171,6 +180,17 @@ public class Note implements Serializable {
 		this.reminder = reminder;
 		return this;
 	}
+
+	public byte[] getNoteImage() {
+		return noteImage;
+	}
+
+	public Note setNoteImage(byte[] noteImage) {
+		this.noteImage = noteImage;
+		return this;
+	}
+
+	
 
 	
 }

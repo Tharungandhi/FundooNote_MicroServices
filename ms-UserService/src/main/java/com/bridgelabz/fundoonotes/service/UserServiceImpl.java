@@ -183,6 +183,23 @@ public class UserServiceImpl  implements UserService {
 }
 
 	
+	@Override
+    public List<UserDetails> allUsers(HttpServletRequest request) {
+        List<UserDetails> users = userDetailsRepository.findAll();
+        if (!users.isEmpty()) {
+            return users;
+        }
+        return null;
+    }
+	
+	@Override
+    public UserDetails getCollaboratedUser(int userId) {
+		UserDetails user=userDetailsRepository.findById(userId).get();
+        return user;
+    }
+
+
+
 	}
 
 

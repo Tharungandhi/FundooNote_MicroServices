@@ -9,9 +9,8 @@ import com.bridgelabz.fundoonotes.model.Collaborator;
 
 public interface CollaboratorRepository extends JpaRepository<Collaborator, Integer> {
 
-	
-	Optional<Collaborator> findByNoteIdAndUserId(int noteId,int userId);
-	
+	Optional<Collaborator> findByIdAndUserId(int id, int userId);
+
 	List<Collaborator> findAllByUserId(int userId);
-	
+
 }
