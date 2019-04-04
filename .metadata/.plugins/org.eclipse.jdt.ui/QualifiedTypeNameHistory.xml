@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-<fullyQualifiedTypeName name="springfox.documentation.builders.PathSelectors"/>
-<fullyQualifiedTypeName name="java.io.Serializable"/>
-<fullyQualifiedTypeName name="io.jsonwebtoken.Claims"/>
-<fullyQualifiedTypeName name="io.jsonwebtoken.Jwts"/>
 <fullyQualifiedTypeName name="javax.xml.bind.DatatypeConverter"/>
 <fullyQualifiedTypeName name="com.bridgelabz.fundoonotes.util.GenerateTokenImpl"/>
 <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.RequestMapping"/>
@@ -12,10 +8,6 @@
 <fullyQualifiedTypeName name="com.bridgelabz.fundoonotes.service.NoteService"/>
 <fullyQualifiedTypeName name="com.bridgelabz.fundoonotes.dao.NoteDetailsRepository"/>
 <fullyQualifiedTypeName name="com.bridgelabz.fundoonotes.util.GenerateJWT"/>
-<fullyQualifiedTypeName name="javax.persistence.Id"/>
-<fullyQualifiedTypeName name="javax.persistence.GeneratedValue"/>
-<fullyQualifiedTypeName name="javax.persistence.Entity"/>
-<fullyQualifiedTypeName name="javax.persistence.Table"/>
 <fullyQualifiedTypeName name="org.springframework.stereotype.Repository"/>
 <fullyQualifiedTypeName name="com.bridgelabz.fundoonotes.dao.LabelDetailsRepository"/>
 <fullyQualifiedTypeName name="javax.persistence.JoinTable"/>
@@ -48,16 +40,24 @@
 <fullyQualifiedTypeName name="com.bridgelabz.fundoonotes.model.UserDetails"/>
 <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.PostMapping"/>
 <fullyQualifiedTypeName name="org.springframework.http.ResponseEntity"/>
-<fullyQualifiedTypeName name="javax.persistence.UniqueConstraint"/>
 <fullyQualifiedTypeName name="com.bridgelabz.fundoonotes.dao.CollaboratorRepository"/>
 <fullyQualifiedTypeName name="java.util.Optional"/>
-<fullyQualifiedTypeName name="java.util.List"/>
 <fullyQualifiedTypeName name="javax.validation.Validation"/>
-<fullyQualifiedTypeName name="com.bridgelabz.fundoonotes.model.Collaborator"/>
 <fullyQualifiedTypeName name="java.util.ArrayList"/>
-<fullyQualifiedTypeName name="javax.persistence.Column"/>
+<fullyQualifiedTypeName name="com.bridgelabz.fundoonotes.util.EmailUtil"/>
 <fullyQualifiedTypeName name="org.hibernate.annotations.UpdateTimestamp"/>
 <fullyQualifiedTypeName name="java.sql.Timestamp"/>
+<fullyQualifiedTypeName name="javax.persistence.UniqueConstraint"/>
+<fullyQualifiedTypeName name="javax.persistence.Entity"/>
+<fullyQualifiedTypeName name="com.bridgelabz.fundoonotes.model.Collaborator"/>
+<fullyQualifiedTypeName name="java.util.List"/>
+<fullyQualifiedTypeName name="javax.persistence.Id"/>
+<fullyQualifiedTypeName name="javax.persistence.GeneratedValue"/>
+<fullyQualifiedTypeName name="javax.persistence.Column"/>
+<fullyQualifiedTypeName name="javax.persistence.Lob"/>
 <fullyQualifiedTypeName name="org.springframework.beans.factory.annotation.Autowired"/>
-<fullyQualifiedTypeName name="com.bridgelabz.fundoonotes.util.EmailUtil"/>
+<fullyQualifiedTypeName name="com.bridgelabz.fundoonotes.dao.ImageRepository"/>
+<fullyQualifiedTypeName name="javax.persistence.Table"/>
+<fullyQualifiedTypeName name="com.bridgelabz.fundoonotes.model.Images"/>
+<fullyQualifiedTypeName name="javax.persistence.OneToMany"/>
 </qualifiedTypeNameHistroy>

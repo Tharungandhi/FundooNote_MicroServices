@@ -144,7 +144,7 @@ public class NoteController {
 	
 	
 	@PostMapping(value = "createcollaborator/{id}/{userId}")
-	public ResponseEntity<?> createCollaborator(@RequestHeader("token") String token, @PathVariable("noteId") int id,
+	public ResponseEntity<?> createCollaborator(@RequestHeader("token") String token, @PathVariable("id") int id,
 			@PathVariable("userId") int userId,HttpServletRequest request) {
 		if (noteService.createCollaborator(token, id, userId))
 			return new ResponseEntity<Void>(HttpStatus.OK);
@@ -159,29 +159,18 @@ public class NoteController {
         return new ResponseEntity<String>("Couldnot delete the image", HttpStatus.CONFLICT);
 }
 	
-	@PostMapping("/uploadimage/{token:.+}")
-	public ResponseEntity<?> uploadFile(@PathVariable ("token")String token,@RequestParam ("file")
-	MultipartFile  imageUpload ) throws IOException {	      
-		if( noteService.uploadImage(token,imageUpload)!=null)
-			return new ResponseEntity<String>("Successfully uploaded", HttpStatus.OK);
-
-		else
-			return new ResponseEntity<String>("Something went wrong",HttpStatus.NOT_FOUND);
-
-}
+	@PostMapping(value = "noteimage/{id}")
+	public ResponseEntity<?> storeFile(@RequestParam("file") MultipartFile file,
+			@PathVariable("id") int noteId)
+			throws IOException {
+		if (noteService.addNoteImage(file,noteId))
+			return new ResponseEntity<Void>(HttpStatus.OK);
+		return new ResponseEntity<String>("Error in uploading the image", HttpStatus.CONFLICT);
+	}
 	
-	@GetMapping("uploadimage")
-    public ResponseEntity<?> downloadFile(@RequestHeader("token") String token) {
-        Note note = noteService.getImage(token);
-        if(note!=null)
-			return new ResponseEntity<Note>(note,HttpStatus.OK);
-        return new ResponseEntity<String>("Couldnot download the image", HttpStatus.CONFLICT);
-}
-	
-	@DeleteMapping("uploadimage")
-    public ResponseEntity<?> deleteFile(@RequestHeader("token") String token) {
-		Note user = noteService.deleteImage(token);
-        if(user!=null)
+	@DeleteMapping("noteimage/{imagesId}")
+    public ResponseEntity<?> deleteFile(@PathVariable("imagesId") int imagesId) {
+        if(noteService.deleteFile(imagesId))
 			return new ResponseEntity<Void>(HttpStatus.OK);
         return new ResponseEntity<String>("Couldnot delete the image", HttpStatus.CONFLICT);
 }

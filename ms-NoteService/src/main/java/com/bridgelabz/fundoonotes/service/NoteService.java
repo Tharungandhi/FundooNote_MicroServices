@@ -41,12 +41,10 @@ public interface NoteService {
 	boolean createCollaborator(String token, int noteId, int userId);
 	
 	boolean removeCollaborator(int userId, int noteId);
-	
-	Note deleteImage(String token);
-	
-	 Note getImage(String token);
 	 
-	 Note uploadImage(String token, MultipartFile imageUpload) throws IOException ;
+	 boolean addNoteImage(MultipartFile file, int noteId) throws IOException;
+	 
+	 boolean deleteFile(int imagesId);
 	}
 
 

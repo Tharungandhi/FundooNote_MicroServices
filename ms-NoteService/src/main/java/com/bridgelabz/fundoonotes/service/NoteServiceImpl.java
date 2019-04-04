@@ -13,9 +13,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.bridgelabz.fundoonotes.dao.CollaboratorRepository;
+import com.bridgelabz.fundoonotes.dao.ImageRepository;
 import com.bridgelabz.fundoonotes.dao.LabelDetailsRepository;
 import com.bridgelabz.fundoonotes.dao.NoteDetailsRepository;
 import com.bridgelabz.fundoonotes.model.Collaborator;
+import com.bridgelabz.fundoonotes.model.Images;
 import com.bridgelabz.fundoonotes.model.Label;
 import com.bridgelabz.fundoonotes.model.Note;
 import com.bridgelabz.fundoonotes.util.EmailUtil;
@@ -35,6 +37,9 @@ public class NoteServiceImpl implements NoteService {
 	
 	@Autowired
 	CollaboratorRepository collaboratorRepository;
+	
+	@Autowired
+	ImageRepository imageRepository;
 	
 	@Autowired
 	EmailUtil emailUtil;
@@ -147,32 +152,6 @@ public class NoteServiceImpl implements NoteService {
 	}
 	
 	
-
-	@Override
-	public Note uploadImage(String token, MultipartFile imageUpload) throws IOException {
-		int userId = generateToken.verifyToken(token);
-		Note note = noteDetailsRepository.findById(userId).get();
-	    	 System.out.println("My Note is "+note);
-	    	 note.setNoteImage(imageUpload.getBytes());
-	    	 noteDetailsRepository.save(note);
-	     return note;
-	}
-	
-	@Override
-	public Note getImage(String token){
-		int userId = generateToken.verifyToken(token);
-		return noteDetailsRepository.findById(userId).get();
-}
-	
-
-	@Override
-	public Note deleteImage(String token) {
-		Note note = noteDetailsRepository.findById(generateToken.verifyToken(token)).get();
-		noteDetailsRepository.save(note.setNoteImage(null));
-		return note;
-}
-	
-	
 	public boolean createCollaborator(String token, int id, int userId) {
         Collaborator collaborator = new Collaborator();
         collaborator = collaboratorRepository.save(collaborator.setId(id).setUserId(userId));
@@ -193,5 +172,24 @@ return false;
         }
         return false;
 }
-	
+    public boolean addNoteImage(MultipartFile file, int noteId) throws IOException {
+		Note note = noteDetailsRepository.findById(noteId).get();
+		if (note != null) {
+			Images image = new Images();
+			image.setImages(file.getBytes()).setId(noteId);
+			imageRepository.save(image);
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public boolean deleteFile(int imagesId) {
+		Images image = imageRepository.findById(imagesId).get();
+		if (image!=null) {
+			imageRepository.delete(image);
+			return true;
+		}
+		return false;
+}
 }

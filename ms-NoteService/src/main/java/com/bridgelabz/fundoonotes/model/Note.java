@@ -60,8 +60,8 @@ public class Note implements Serializable {
 	@Column(name = "isArchive")
 	private boolean isArchive;
 	
-	@Lob
-	private byte[] noteImage;
+	@OneToMany(mappedBy = "id")
+	private List<Images> images;
 	
 	
 	@ManyToMany(fetch = FetchType.EAGER, targetEntity = Label.class, cascade = {CascadeType.ALL })
@@ -181,16 +181,28 @@ public class Note implements Serializable {
 		return this;
 	}
 
-	public byte[] getNoteImage() {
-		return noteImage;
+	public List<Images> getImages() {
+		return images;
 	}
 
-	public Note setNoteImage(byte[] noteImage) {
-		this.noteImage = noteImage;
-		return this;
+	public void setImages(List<Images> images) {
+		this.images = images;
 	}
 
-	
+	public List<Collaborator> getCollaborators() {
+		return collaborators;
+	}
 
-	
+	public void setCollaborators(List<Collaborator> collaborators) {
+		this.collaborators = collaborators;
+	}
+
+	@Override
+	public String toString() {
+		return "Note [id=" + id + ", title=" + title + ", discription=" + discription + ", isPinned=" + isPinned
+				+ ", inTrash=" + inTrash + ", updateTime=" + updateTime + ", userId=" + userId + ", color=" + color
+				+ ", reminder=" + reminder + ", createdTime=" + createdTime + ", isArchive=" + isArchive + ", images="
+				+ images + ", labels=" + labels + ", collaborators=" + collaborators + "]";
+	}
+
 }
